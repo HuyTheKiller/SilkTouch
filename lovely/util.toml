@@ -1,0 +1,27 @@
+[manifest]
+dump_lua = true
+priority = 10
+version = "1.0.0"
+
+[[patches]]
+[patches.copy]
+target = "main.lua"
+position = "append"
+sources = [
+    "src/util.lua",
+]
+
+[[patches]]
+[patches.pattern]
+target = "functions/UI_definitions.lua"
+pattern = '''local t = create_UIBox_generic_options({back_func = 'options',contents = {create_tabs('''
+position = "before"
+payload = '''
+if not SMODS then
+  tabs[#tabs+1] = {
+    label = "SilkTouch",
+    tab_definition_function = SilkTouch.config_tab
+  }
+end
+'''
+match_indent = true

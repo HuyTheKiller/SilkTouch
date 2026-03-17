@@ -1,0 +1,15 @@
+{
+	"id": "SilkTouch",
+	"name": "Silk Touch",
+	"website_url": "https://github.com/HuyTheKiller/SilkTouch",
+	"author": ["HuyTheKiller"],
+	"description": "Brings touch controls to PC/Mac port, with extensibility in mind.",
+	"prefix": "stouch",
+	"main_file": "main.lua",
+	"priority": -10,
+	"badge_colour": "27b29a",
+	"display_name": "Silk Touch",
+	"dependencies": [],
+	"conflicts": ["eramdam.sticky-fingers"],
+	"version": "1.0"
+}
