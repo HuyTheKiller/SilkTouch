@@ -104,7 +104,6 @@ end
 
 function create_drag_target_from_card(_card)
   if _card and G.STAGE == G.STAGES.RUN then
-    if _card.area then _card.area:remove_from_highlighted(_card) end
     if not G.DRAG_TARGETS then
       G.DRAG_TARGETS = {
         S_buy =         Moveable{T={x = G.jokers.T.x, y = G.jokers.T.y - 0.1, w = G.consumeables.T.x + G.consumeables.T.w - G.jokers.T.x, h = G.jokers.T.h+0.6}},
@@ -285,6 +284,7 @@ end
 
 function drag_target(args)
   args = args or {}
+  if args.card and args.card.area then args.card.area:remove_from_highlighted(args.card) end
   args.text = args.text or {'BUY'}
   args.colour = copy_table(args.colour or G.C.UI.TRANSPARENT_DARK)
   args.cover = args.cover or nil
