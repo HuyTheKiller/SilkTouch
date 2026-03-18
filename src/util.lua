@@ -1,4 +1,4 @@
-SilkTouch = SilkTouch or {}
+SilkTouch = {}
 
 if G.SETTINGS.enable_action_buttons == nil then
     G.SETTINGS.enable_action_buttons = true
