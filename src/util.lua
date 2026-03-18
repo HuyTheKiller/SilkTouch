@@ -38,7 +38,7 @@ G.FUNCS.can_select_card = function(e)
     local card = e.config.ref_table
     local card_limit = card.ability.card_limit - card.ability.extra_slots_used
     local to_area = SMODS and booster_obj and SMODS.card_select_area(card, booster_obj) and card:selectable_from_pack(booster_obj)
-    if card.ability.set == 'Joker' then
+    if card.ability.set == 'Joker' and not to_area then
         to_area = "jokers"
     end
     if to_area and #G[to_area].cards < G[to_area].config.card_limit + card_limit
