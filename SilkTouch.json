@@ -11,5 +11,5 @@
 	"display_name": "Silk Touch",
 	"dependencies": ["Steamodded (>=1.0.0~BETA-1016c)"],
 	"conflicts": ["eramdam.sticky-fingers"],
-	"version": "1.0.2"
+	"version": "1.0.3"
 }
