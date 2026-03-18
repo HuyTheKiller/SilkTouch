@@ -11,5 +11,5 @@
 	"display_name": "Silk Touch",
 	"dependencies": [],
 	"conflicts": ["eramdam.sticky-fingers"],
-	"version": "1.0"
+	"version": "1.0.1"
 }
