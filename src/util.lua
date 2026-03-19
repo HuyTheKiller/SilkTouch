@@ -30,18 +30,23 @@ end
 
 function SilkTouch.can_select(_card)
     local temp_config = {UIBox = {states = {visible = false}}, config = {ref_table = _card}}
-    G.FUNCS.can_select_card(temp_config)
+    if _card.ability.set == "Joker" or _card.ability.set == "Planet"
+    or _card.ability.set == "Default" or _card.ability.set == "Enhanced" then
+        G.FUNCS.can_select_card(temp_config)
+    elseif SMODS and _card.ability.consumeable then
+        G.FUNCS.can_select_from_booster(temp_config)
+    end
     return temp_config.config.button ~= nil
 end
 
 G.FUNCS.can_select_card = function(e)
     local card = e.config.ref_table
-    local card_limit = card.ability.card_limit - card.ability.extra_slots_used
+    local card_limit = (card.ability.card_limit or 0) - (card.ability.extra_slots_used or 0)
     local to_area = SMODS and booster_obj and SMODS.card_select_area(card, booster_obj) and card:selectable_from_pack(booster_obj)
     if card.ability.set == 'Joker' and not to_area then
         to_area = "jokers"
     end
-    if to_area and #G[to_area].cards < G[to_area].config.card_limit + card_limit
+    if (to_area and #G[to_area].cards < G[to_area].config.card_limit + card_limit)
     or ((card.ability.set == "Planet" or card.ability.set == "Default" or card.ability.set == "Enhanced") and not to_area) then
         e.config.colour = G.C.GREEN
         e.config.button = 'use_card'
