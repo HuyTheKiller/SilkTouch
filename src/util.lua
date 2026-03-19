@@ -47,7 +47,7 @@ G.FUNCS.can_select_card = function(e)
         to_area = "jokers"
     end
     if (to_area and #G[to_area].cards < G[to_area].config.card_limit + card_limit)
-    or ((card.ability.set == "Planet" or card.ability.set == "Default" or card.ability.set == "Enhanced") and not to_area) then
+    or (card.ability.set == "Planet" and not to_area) or card.ability.set == "Default" or card.ability.set == "Enhanced" then
         e.config.colour = G.C.GREEN
         e.config.button = 'use_card'
     else
