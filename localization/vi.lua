@@ -16,6 +16,7 @@ return {
     },
     misc = {
         dictionary = {
+            ph_enable_dragging = "Bật Kéo Thả",
             ph_enable_action_button = "Bật Nút Thao Tác",
             ph_drag_area_op = "Độ Mờ Khu Vực Kéo Thả",
         },

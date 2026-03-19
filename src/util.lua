@@ -3,14 +3,25 @@ SilkTouch = {}
 if G.SETTINGS.enable_action_buttons == nil then
     G.SETTINGS.enable_action_buttons = true
 end
+if G.SETTINGS.enable_dragging == nil then
+    G.SETTINGS.enable_dragging = true
+end
 G.SETTINGS.drag_area_opacity = G.SETTINGS.drag_area_opacity or 90
 
 function SilkTouch.config_tab()
+    local dragging_label = localize("ph_enable_dragging") ~= "ERROR"
+    and localize("ph_enable_dragging") or "Enable Dragging"
     local action_button_label = localize("ph_enable_action_button") ~= "ERROR"
     and localize("ph_enable_action_button") or "Enable Actions Buttons"
     local drag_area_op_label = localize("ph_drag_area_op") ~= "ERROR"
     and localize("ph_drag_area_op") or "Drag Area Opacity"
     return {n=G.UIT.ROOT, config={align = "cm", padding = 0.05, colour = G.C.CLEAR}, nodes={
+        create_toggle({label = dragging_label, ref_table = G.SETTINGS, ref_value = 'enable_dragging',
+        callback = function()
+            for _, area in ipairs(G.I.CARDAREA) do
+                area:set_ranks()
+            end
+        end}),
         create_toggle({label = action_button_label, ref_table = G.SETTINGS, ref_value = 'enable_action_buttons'}),
         create_slider({label = drag_area_op_label, w = 5, h = 0.4, ref_table = G.SETTINGS, ref_value = 'drag_area_opacity', min = 0, max = 100}),
     }}
@@ -64,7 +75,8 @@ end
 
 local can_highlight_ref = CardArea.can_highlight
 function CardArea:can_highlight(card)
-    if not G.SETTINGS.enable_action_buttons and self.config.type ~= 'hand' then return false end
+    if not G.SETTINGS.enable_action_buttons and G.SETTINGS.enable_dragging
+    and self.config.type ~= 'hand' then return false end
     return can_highlight_ref(self, card)
 end
 
@@ -289,6 +301,7 @@ function create_drag_target_from_card(_card)
 end
 
 function drag_target(args)
+  if not G.SETTINGS.enable_dragging then return end
   args = args or {}
   if args.card and args.card.area then args.card.area:remove_from_highlighted(args.card) end
   args.text = args.text or {'BUY'}

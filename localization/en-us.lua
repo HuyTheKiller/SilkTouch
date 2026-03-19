@@ -16,6 +16,7 @@ return {
     },
     misc = {
         dictionary = {
+            ph_enable_dragging = "Enable Dragging",
             ph_enable_action_button = "Enable Actions Buttons",
             ph_drag_area_op = "Drag Area Opacity",
         },

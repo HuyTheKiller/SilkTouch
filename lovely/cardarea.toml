@@ -13,7 +13,7 @@ card.states.drag.can = false
 position = "at"
 payload = '''
 elseif self.config.type == 'play' or self.config.type == 'shop' or self.config.type == 'consumeable' then
-    if (self.config.type == 'shop') or (self.config.type == 'consumeable') then 
+    if (self.config.type == 'shop' or self.config.type == 'consumeable') and G.SETTINGS.enable_dragging then 
         card.states.drag.can = true
     else
         card.states.drag.can = false
