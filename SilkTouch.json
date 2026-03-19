@@ -9,7 +9,7 @@
 	"priority": -10,
 	"badge_colour": "27b29a",
 	"display_name": "Silk Touch",
-	"dependencies": ["Steamodded (>=1.0.0~BETA-1016c)"],
+	"dependencies": ["Steamodded (>=1.0.0~BETA-1224a)"],
 	"conflicts": ["eramdam.sticky-fingers"],
 	"version": "1.0.3"
 }
