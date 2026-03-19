@@ -285,7 +285,7 @@ function create_drag_target_from_card(_card)
     for k, v in pairs(SilkTouch.DragTargets or {}) do
       if v.drag_condition and v.drag_condition(_card) then
         drag_target{
-          cover = type(v.moveable_t) == "string" and G.DRAG_TARGETS[v.moveable_t] or G.DRAG_TARGETS[k],
+          cover = type(v.moveable_t) == "string" and G.DRAG_TARGETS[v.moveable_t] or G.DRAG_TARGETS[k] or G.DRAG_TARGETS.S_buy,
           colour = adjust_alpha(v.colour, (G.SETTINGS.drag_area_opacity / 100)),
           text = type(v.text) == "function" and v.text(_card),
           card = _card,
