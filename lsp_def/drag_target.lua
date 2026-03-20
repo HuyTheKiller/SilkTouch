@@ -1,18 +1,21 @@
 ---@meta
 
----@class Moveable_arg: table
+---@class MoveableArg: table
 ---@field ref_table? string|string[]
 ---@field ref_value? string|string[]
 ---@field operation_table? string[]
 ---@field mod_value? number
 
 ---@class SilkTouch.DragTarget: SMODS.GameObject
----@field moveable_t? string|{x: Moveable_arg|table, y: Moveable_arg|table, w: Moveable_arg|table, h: Moveable_arg|table} The string key of a predefined Moveable cover, otherwise a Moveable setup.
+---@field moveable_t? string|{x: MoveableArg|table, y: MoveableArg|table, w: MoveableArg|table, h: MoveableArg|table} The string key of a predefined Moveable cover, otherwise a Moveable setup.
 ---@field text? fun(card: table|Card): table A function returning a table of localized texts.
----@field colour? number[] An array of 4 numbers, using RGBA format.
+---@field colour? number[] Active colour for this drag area.
 ---@field drag_condition? fun(card: table|Card): boolean Used to check if dragging a card shows the drag area or not.
 ---@field active_check? fun(card: table|Card): boolean Used to check if releasing inside drag area may trigger `release_func`.
 ---@field release_func? fun(card: table|Card) Used to perform an action when released inside drag area.
+---@field emboss? number See [Steamodded UI guide](https://github.com/Steamodded/smods/wiki/UI-Guide#node-configuration)
+---@field align? string See [Steamodded UI guide](https://github.com/Steamodded/smods/wiki/UI-Guide#node-configuration)
+---@field offset? {x: number, y: number} How far away from the alignment origin this drag area is. Simply use `moveable_t` for finer control over the positions.
 ---@field super? SMODS.GameObject|table Parent class.
 ---@field obj_table? table<string, SilkTouch.DragTarget|table> Table of objects registered to this class.
 ---@field obj_buffer? string[] Array of keys to all objects registered to this class.
