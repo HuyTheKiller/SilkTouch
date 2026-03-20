@@ -58,8 +58,8 @@ SilkTouch.ControllerButton{
     text_scale = function() return {0.5} end,
     focus_condition = function(card)
         return G.STAGE == G.STAGES.RUN and card.area and (card.area == G.shop_jokers
-        or (card.area == G.shop_vouchers and card.ability.set ~= "Voucher")
-        or (card.area == G.shop_booster and card.ability.set ~= "Booster"))
+        or card.area == G.shop_vouchers or card.area == G.shop_booster)
+        and card.ability.set ~= "Voucher" and card.ability.set ~= "Booster"
     end,
     active_check_cb = "can_buy",
     press_func_cb = "buy_from_shop",
@@ -83,8 +83,8 @@ SilkTouch.ControllerButton{
     minh = 1,
     focus_condition = function(card)
         return G.STAGE == G.STAGES.RUN and card.area and (card.area == G.shop_jokers
-        or (card.area == G.shop_vouchers and card.ability.set ~= "Voucher")
-        or (card.area == G.shop_booster and card.ability.set ~= "Booster"))
+        or card.area == G.shop_vouchers or card.area == G.shop_booster)
+        and card.ability.set ~= "Voucher" and card.ability.set ~= "Booster"
         and card.ability.consumeable
     end,
     active_check_cb = "can_buy_and_use",
@@ -106,7 +106,9 @@ SilkTouch.ControllerButton{
     text_scale = function() return {0.5} end,
     minw = 1.3,
     focus_condition = function(card)
-        return G.STAGE == G.STAGES.RUN and card.ability.set == "Voucher"
+        return G.STAGE == G.STAGES.RUN and card.area and (card.area == G.shop_jokers
+        or card.area == G.shop_vouchers or card.area == G.shop_booster)
+        and card.ability.set == "Voucher"
     end,
     active_check_cb = "can_redeem",
     press_func_cb = "redeem_from_shop",
@@ -128,7 +130,9 @@ SilkTouch.ControllerButton{
     card_width_coeffi = 0.85,
     minw = 1.2,
     focus_condition = function(card)
-        return G.STAGE == G.STAGES.RUN and card.ability.set == "Booster"
+        return G.STAGE == G.STAGES.RUN and card.area and (card.area == G.shop_jokers
+        or card.area == G.shop_vouchers or card.area == G.shop_booster)
+        and card.ability.set == "Booster"
     end,
     active_check_cb = "can_open",
     press_func_cb = "open_booster",
