@@ -174,32 +174,36 @@ function G.UIDEF.card_focus_ui(card)
 
   local realignment = {left = {}, right = {}}
   for _, v in pairs(base_attach.children) do
-    if v.silktouch_utils then
+    if v.silktouch_utils and (v.silktouch_utils.max_index or 1) > 1 then
       table.insert(realignment[v.silktouch_utils.side], v)
     end
   end
 
   local sort = function(a, b) return (a and a.index or 0) < (b and b.index or 0) end
-  table.sort(realignment.left, sort)
-  table.sort(realignment.right, sort)
+  if #realignment.left > 1 then table.sort(realignment.left, sort) end
+  if #realignment.right > 1 then table.sort(realignment.right, sort) end
 
   local total_height = {left = 0, right = 0}
   for side, items in pairs(realignment) do
-    for i, v in ipairs(items) do
-      total_height[side] = total_height[side] + v.silktouch_utils.minh
-      if i > 1 then
-        total_height[side] = total_height[side] + 0.2
+    if #items > 1 then
+      for i, v in ipairs(items) do
+        total_height[side] = total_height[side] + v.silktouch_utils.minh
+        if i > 1 then
+          total_height[side] = total_height[side] + 0.2
+        end
       end
     end
   end
   for side, items in pairs(realignment) do
-    local leftmost_free = 0
-    for i, v in ipairs(items) do
-      if i == 1 then
-        leftmost_free = -total_height[side]/2
+    if #items > 1 then
+      local leftmost_free = 0
+      for i, v in ipairs(items) do
+        if i == 1 then
+          leftmost_free = -total_height[side]/2
+        end
+        v.alignment.offset.y = leftmost_free + v.silktouch_utils.minh/2
+        leftmost_free = leftmost_free + v.silktouch_utils.minh + 0.2
       end
-      v.alignment.offset.y = leftmost_free + v.silktouch_utils.minh/2
-      leftmost_free = leftmost_free + v.silktouch_utils.minh + 0.2
     end
   end
 
