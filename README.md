@@ -15,6 +15,9 @@ end
 ```
 You can then start adding your own drag areas. See below for documentation.
 
+### What's new in v1.1:
+This version is packed with a brand new API: `SilkTouch.ControllerButton`, allowing other mods to append buttons meant for controller on a card.
+
 # API Documentation: `SilkTouch.DragTarget`
 
 - **Required parameters:**
@@ -96,3 +99,107 @@ You can then start adding your own drag areas. See below for documentation.
             end
         }
         ```
+
+# API Documentation: `SilkTouch.ControllerButton`
+
+- **Required parameters:**
+	- `key`
+- **Optional parameters** *(defaults)*:
+    - `side = "left"`: The side the button will be on when it's available, either `"left"` or `"right"`
+    - `button_key = "leftshoulder"`: The key to the controller input needed to activate this button
+        - Expects any of the following keys:
+        ```lua
+        {
+            "a", "b", "x", "y", "leftshoulder", "rightshoulder",
+            "triggerleft", "triggerright", "start", "back",
+            "dpadup", "dpadright", "dpaddown", "dpadleft",
+            "left", "right", "leftstick", "rightstick", "guide",
+        }
+        ```
+    - `button_order = 1`: The order of this button when aligning multiple ones on either side (smallest order is placed on top)
+        - It's recommended for your custom buttons to start at 2
+    - `text`: A function returning a table of localized texts
+        - Expects a function like this:
+        ```lua
+        {
+            -- Example 1: single line of text
+            text = function(card)
+                return {
+                    localize('b_buy'),  -- The only line
+                    single_text = true, -- Set this field to true (optional but recommended)
+                }
+            end,
+            -- Example 2: multiple lines of text
+            text = function(card)
+                return {
+                    localize('b_buy'),     -- The first line
+                    localize('b_and_use'), -- The second line
+                }
+            end,
+            -- Example 3: multiple text combinations on single lines
+            text = function(card)
+                return {
+                    localize('b_sell'), -- The first line
+                    {                   -- The second line
+                        localize('$'),  -- First piece of text on second line
+                        -- Second piece of text on second line
+                        -- any string text mentioned above can be replaced with ref_table and ref_value
+                        {ref_table = card, ref_value = "sell_cost_label"},
+                    },
+                }
+            end
+        }
+        ```
+    - `text_scale`: A function returning a table of text scales for the return table of `text` above
+        - Expects a function like this:
+        ```lua
+        {
+            -- This is used for Example 3 above
+            text_scale = function()
+                return {
+                    0.4, -- First line
+                    {0.4, 0.55}, -- Second line, used for each piece of text separately
+                }
+            end
+        }
+        ```
+    - `colour = G.C.GREEN`: Active colour for this button
+    - `card_width_coeffi = 1`: The coefficient for the focus box width of the card this button is on, mainly used for Booster Packs
+    - `minw`, `minh`: Minimum width and height of this button
+    - `focus_condition`: A function to check if a focused card shows the button or not
+        - Expects a function like this:
+        ```lua
+        {
+            focus_condition = function(card)
+                -- Example check if it's a voucher to show the REDEEM button
+                -- Make sure it only works in shop areas (*cough* Cryptid Equilibrium Deck *cough*)
+                return G.STAGE == G.STAGES.RUN and card.area and (card.area == G.shop_jokers
+                or card.area == G.shop_vouchers or card.area == G.shop_booster)
+                and card.ability.set == "Voucher"
+            end
+        }
+        ```
+    - `active_check`: A function to check if activating this button may trigger `press_func` (more on that below)
+        - Expects a function like this:
+        ```lua
+        {
+            active_check = function(card)
+                -- Example condition for consumable cards to be useable or not
+                return card:can_use_consumeable()
+            end
+        }
+        ```
+    - `press_func`: A function to perform an action when this button is activated
+        - Expects a function like this:
+        ```lua
+        {
+            press_func = function(card)
+                -- Example action for using consumable cards
+                if card:can_use_consumeable() then
+                    G.FUNCS.use_card({config={ref_table = card}})
+                end
+            end
+        }
+        ```
+    - `active_check_cb`, `press_func_cb`: String keys to the respective function in `G.FUNCS` for handling whether a button can be activated and the action it will perform, must be defined together (highly recommended)
+        - If these two are defined, `colour`, `active_check` and `press_func` may be ignored
