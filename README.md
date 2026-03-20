@@ -72,7 +72,7 @@ There are 2 other mods - [Sticky Fingers](https://github.com/eramdam/sticky-fing
             end
         }
         ```
-    - `release_func`: A function to to perform an action when released inside drag area
+    - `release_func`: A function to perform an action when released inside drag area
         - Expects a function like this:
         ```lua
         {
