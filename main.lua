@@ -1,6 +1,7 @@
 SilkTouch = SMODS.merge_defaults(SMODS.current_mod, SilkTouch)
 
 SMODS.load_file("src/drag_target.lua")()
+SMODS.load_file("src/controller_button.lua")()
 
 SMODS.Atlas{
     key = "modicon",

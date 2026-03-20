@@ -67,6 +67,290 @@ G.FUNCS.can_select_card = function(e)
     end
 end
 
+function G.UIDEF.card_focus_ui(card)
+  local card_width = card.T.w + (card.ability.consumeable and -0.1 or card.ability.set == 'Voucher' and -0.16 or 0)
+
+  local playing_card_colour = copy_table(G.C.WHITE)
+  playing_card_colour[4] = 1.5
+  if G.hand and card.area == G.hand then ease_value(playing_card_colour, 4, -1.5, nil, 'REAL',nil, 0.2, 'quad') end
+
+  local tcnx, tcny = card.T.x + card.T.w/2 - G.ROOM.T.w/2, card.T.y + card.T.h/2 - G.ROOM.T.h/2
+
+  local base_background = UIBox{
+    T = {card.VT.x,card.VT.y,0,0},
+    definition =
+      (not G.hand or card.area ~= G.hand) and {n=G.UIT.ROOT, config = {align = 'cm', minw = card_width + 0.3, minh = card.T.h + 0.3, r = 0.1, colour = adjust_alpha(G.C.BLACK, 0.7), outline_colour = lighten(G.C.JOKER_GREY, 0.5), outline = 1.5, line_emboss = 0.8}, nodes={
+        {n=G.UIT.R, config={id = 'ATTACH_TO_ME'}, nodes={}}
+      }} or
+      {n=G.UIT.ROOT, config = {align = 'cm', minw = card_width, minh = card.T.h, r = 0.1, colour = playing_card_colour}, nodes={
+        {n=G.UIT.R, config={id = 'ATTACH_TO_ME'}, nodes={}}
+      }},
+    config = {
+      align = 'cm',
+      offset = {x= 0.007*tcnx*card.T.w, y = 0.007*tcny*card.T.h},
+      parent = card,
+      r_bond = (not G.hand or card.area ~= G.hand) and 'Weak' or 'Strong'
+    }
+  }
+
+  base_background.set_alignment = function()
+    local cnx, cny = card.T.x + card.T.w/2 - G.ROOM.T.w/2, card.T.y + card.T.h/2 - G.ROOM.T.h/2
+    Moveable.set_alignment(card.children.focused_ui, {offset = {x= 0.007*cnx*card.T.w, y = 0.007*cny*card.T.h}})
+  end
+
+  local base_attach = base_background:get_UIE_by_ID('ATTACH_TO_ME')
+  base_attach.config.align_count = base_attach.config.align_count or {left = 0, right = 0}
+
+  local passed = {}
+
+  for k, v in pairs(SilkTouch.ControllerButtons or {}) do
+    if v.focus_condition and v.focus_condition(card) then
+      if v.side == "left" or v.side == "right" then
+        base_attach.config.align_count[v.side] = base_attach.config.align_count[v.side] + 1
+        table.insert(passed, {[k] = v, silktouch_order = v.button_order})
+      end
+    end
+  end
+  table.sort(passed, function(a, b) return a.silktouch_order < b.silktouch_order end)
+  for i, button in ipairs(passed) do
+    for k, v in pairs(button) do
+      if k ~= "silktouch_order" then
+        base_attach.children[k] = G.UIDEF.card_focus_button{
+          card = card, parent = base_attach, type = k, func = v.active_check_cb, button = v.press_func_cb,
+          card_width = card_width*v.card_width_coeffi, max_index = base_attach.config.align_count[v.side], index = i
+        }
+      end
+    end
+  end
+
+  if not SMODS then
+    --The card UI can have BUY, REDEEM, USE, and SELL buttons depending on the context of the card
+    if card.area == G.shop_jokers and G.shop_jokers then --Add a buy button
+      local buy_and_use = nil
+      if card.ability.consumeable then
+        base_attach.children.buy_and_use = G.UIDEF.card_focus_button{
+          card = card, parent = base_attach, type = 'buy_and_use',
+          func = 'can_buy_and_use', button = 'buy_from_shop', card_width = card_width
+        }
+        buy_and_use = true
+      end
+      base_attach.children.buy = G.UIDEF.card_focus_button{
+        card = card, parent = base_attach, type = 'buy',
+        func = 'can_buy', button = 'buy_from_shop', card_width = card_width, buy_and_use = buy_and_use
+      }
+    end
+    if card.area == G.shop_vouchers and G.shop_vouchers then --Add a redeem button
+      base_attach.children.redeem = G.UIDEF.card_focus_button{
+        card = card, parent = base_attach, type = 'redeem',
+        func = 'can_redeem', button = 'redeem_from_shop', card_width = card_width
+      }
+    end
+    if card.area == G.shop_booster and G.shop_booster then --Add a redeem button
+      base_attach.children.redeem = G.UIDEF.card_focus_button{
+        card = card, parent = base_attach, type = 'open',
+        func = 'can_open', button = 'open_booster', card_width = card_width*0.85
+      }
+    end
+    if ((card.area == G.consumeables and G.consumeables) or (card.area == G.pack_cards and G.pack_cards)) and
+    card.ability.consumeable then --Add a use button
+      base_attach.children.use = G.UIDEF.card_focus_button{
+        card = card, parent = base_attach, type = 'use',
+        func = 'can_use_consumeable', button = 'use_card', card_width = card_width
+      }
+    end
+    if (card.area == G.pack_cards and G.pack_cards) and not card.ability.consumeable then --Add a use button
+      base_attach.children.use = G.UIDEF.card_focus_button{
+        card = card, parent = base_attach, type = 'select',
+        func = 'can_select_card', button = 'use_card', card_width = card_width
+      }
+    end
+    if (card.area == G.jokers and G.jokers or card.area == G.consumeables and G.consumeables) and G.STATE ~= G.STATES.TUTORIAL then --Add a sell button
+      base_attach.children.sell = G.UIDEF.card_focus_button{
+        card = card, parent = base_attach, type = 'sell',
+        func = 'can_sell_card', button = 'sell_card', card_width = card_width
+      }
+    end
+  end
+
+  local realignment = {left = {}, right = {}}
+  for _, v in pairs(base_attach.children) do
+    if v.silktouch_utils then
+      table.insert(realignment[v.silktouch_utils.side], v)
+    end
+  end
+
+  local sort = function(a, b) return (a and a.index or 0) < (b and b.index or 0) end
+  table.sort(realignment.left, sort)
+  table.sort(realignment.right, sort)
+
+  local total_height = {left = 0, right = 0}
+  for side, items in pairs(realignment) do
+    for i, v in ipairs(items) do
+      total_height[side] = total_height[side] + v.silktouch_utils.minh
+      if i > 1 then
+        total_height[side] = total_height[side] + 0.2
+      end
+    end
+  end
+  for side, items in pairs(realignment) do
+    local leftmost_free = 0
+    for i, v in ipairs(items) do
+      if i == 1 then
+        leftmost_free = -total_height[side]/2
+      end
+      v.alignment.offset.y = leftmost_free + v.silktouch_utils.minh/2
+      leftmost_free = leftmost_free + v.silktouch_utils.minh + 0.2
+    end
+  end
+
+  return base_background
+end
+
+function G.UIDEF.card_focus_button(args)
+  if not args then return end
+
+  local button_contents = {}
+  if not SMODS then
+    if args.type == 'sell' then
+      button_contents =
+      {n=G.UIT.C, config={align = "cl"}, nodes={
+        {n=G.UIT.R, config={align = "cl", maxw = 1}, nodes={
+          {n=G.UIT.T, config={text = localize('b_sell'),colour = G.C.UI.TEXT_LIGHT, scale = 0.4, shadow = true}}
+        }},
+        {n=G.UIT.R, config={align = "cl"}, nodes={
+          {n=G.UIT.T, config={text = localize('$'),colour = G.C.WHITE, scale = 0.4, shadow = true}},
+          {n=G.UIT.T, config={ref_table = args.card, ref_value = 'sell_cost_label', colour = G.C.WHITE, scale = 0.55, shadow = true}}
+        }}
+      }}
+    elseif args.type == 'buy' then
+      button_contents = {n=G.UIT.T, config={text = localize('b_buy'),colour = G.C.WHITE, scale = 0.5}}
+    elseif args.type == 'select' then
+      button_contents = {n=G.UIT.T, config={text = localize('b_select'),colour = G.C.WHITE, scale = 0.3}}
+    elseif args.type == 'redeem' then
+      button_contents = {n=G.UIT.T, config={text = localize('b_redeem'),colour = G.C.WHITE, scale = 0.5}}
+    elseif args.type == 'open' then
+      button_contents = {n=G.UIT.T, config={text = localize('b_open'),colour = G.C.WHITE, scale = 0.5}}
+    elseif args.type == 'use' then
+      button_contents = {n=G.UIT.T, config={text = localize('b_use'),colour = G.C.WHITE, scale = 0.5}}
+    elseif args.type == 'buy_and_use' then
+      button_contents =
+      {n=G.UIT.C, config={align = "cr"}, nodes={
+        {n=G.UIT.R, config={align = "cr", maxw = 1}, nodes={
+          {n=G.UIT.T, config={text = localize('b_buy'),colour = G.C.UI.TEXT_LIGHT, scale = 0.4, shadow = true}}
+        }},
+        {n=G.UIT.R, config={align = "cr", maxw = 1}, nodes={
+          {n=G.UIT.T, config={text = localize('b_and_use'),colour = G.C.WHITE, scale = 0.3, shadow = true}},
+        }}
+      }}
+    end
+  end
+
+  if not next(button_contents) then
+    for k, v in pairs(SilkTouch.ControllerButtons or {}) do
+      if args.type == k then
+        button_contents = {n=G.UIT.C, config={align = v.side == "left" and "cl" or "cr"}, nodes={}}
+        local text_table = v.text and v.text(args.card) or {}
+        local text_scale_table = v.text_scale and v.text_scale()
+        if text_table.single_text then
+          if type(text_table[1]) == "table" and text_table[1].ref_table and text_table[1].ref_value then
+            button_contents = {n=G.UIT.T, config={ref_table = text_table[1].ref_table, ref_value = text_table[1].ref_value,
+            colour = G.C.WHITE, scale = text_scale_table[1]}}
+          else
+            button_contents = {n=G.UIT.T, config={text = text_table[1], colour = G.C.WHITE, scale = text_scale_table[1]}}
+          end
+        else
+          for i, text in ipairs(text_table) do
+            local node = {n=G.UIT.R, config={align = v.side == "left" and "cl" or "cr", maxw = 1}, nodes={}}
+            if type(text) == "table" and type(text_scale_table[i]) == "table" then
+              node.config.maxw = nil
+              for j, inner_text in ipairs(text) do
+                local inner_node
+                if type(inner_text) == "table" and inner_text.ref_table and inner_text.ref_value then
+                  inner_node = {n=G.UIT.T, config={ref_table = inner_text.ref_table, ref_value = inner_text.ref_value,
+                  colour = G.C.WHITE, scale = text_scale_table[i][j] or 0.4, shadow = true}}
+                else
+                  inner_node = {n=G.UIT.T, config={text = inner_text, colour = G.C.WHITE,
+                  scale = text_scale_table[i][j] or 0.4, shadow = true}}
+                end
+                table.insert(node.nodes, inner_node)
+              end
+            elseif type(text) == "table" and text.ref_table and text.ref_value then
+              local inner_node = {n=G.UIT.T, config={ref_table = text.ref_table, ref_value = text.ref_value,
+              colour = G.C.WHITE, scale = text_scale_table[i] or 0.4, shadow = true}}
+              table.insert(node.nodes, inner_node)
+            else
+              local inner_node = {n=G.UIT.T, config={text = text, colour = G.C.WHITE, scale = text_scale_table[i] or 0.4, shadow = true}}
+              table.insert(node.nodes, inner_node)
+            end
+            table.insert(button_contents.nodes, node)
+          end
+        end
+
+        local minw = v.minw or 1
+        local minh = v.minh or (0.5 + 0.5*(#(button_contents.nodes or {0})))
+
+        local uibox = UIBox{
+          T = {args.card.VT.x,args.card.VT.y,0,0},
+          definition =
+            {n=G.UIT.ROOT, config = {align = 'cm', colour = G.C.CLEAR}, nodes={
+              {n=G.UIT.R, config={id = k, ref_table = args.card, ref_parent = args.parent, align = v.side == "left" and 'cl' or 'cr', colour = G.C.BLACK, shadow = true, r = 0.08, func = args.func, one_press = true, button = args.button, focus_args = {type = 'none'}, hover = true}, nodes={
+                {n=G.UIT.R, config={align = v.side == "left" and 'cl' or 'cr', minw = minw, minh = minh, padding = 0.08,
+                    focus_args = {button = v.button_key, scale = 0.55, orientation = v.side == "left" and 'tli' or 'tri', offset = {x = v.side == "left" and 0.1 or -0.1, y = 0}, type = 'none'},
+                    func = 'set_button_pip'}, nodes={
+                  {n=G.UIT.R, config={align = "cm", minh = 0.3}, nodes={}},
+                  {n=G.UIT.R, config={align = "cm"}, nodes={
+                    #(button_contents.nodes or {}) > 1 and not v.minh and {n=G.UIT.C, config={align = "cm",minw = 0.2, minh = 0.6}, nodes={}} or nil,
+                    {n=G.UIT.C, config={align = "cm", maxw = 1}, nodes={
+                      button_contents
+                    }},
+                    #(button_contents.nodes or {}) > 1 and not v.minh and {n=G.UIT.C, config={align = "cm",minw = 0.2, minh = 0.6}, nodes={}} or nil,
+                  }}
+                }}
+              }}
+            }},
+          config = {
+            align = v.side == "left" and 'cl' or 'cr',
+            offset = {x=(v.side == "left" and -1 or 1)*((args.card_width or 0) - 0.17 - args.card.T.w/2),y=args.type == 'buy_and_use' and 0.6 or (args.buy_and_use) and -0.6 or 0},
+            parent = args.parent,
+          }
+        }
+        uibox.silktouch_utils = {
+          minw = minw, minh = minh,
+          side = v.side, index = args.index,
+          max_index = args.max_index
+        }
+        return uibox
+      end
+    end
+  end
+
+  return UIBox{
+    T = {args.card.VT.x,args.card.VT.y,0,0},
+    definition =
+      {n=G.UIT.ROOT, config = {align = 'cm', colour = G.C.CLEAR}, nodes={
+        {n=G.UIT.R, config={id = args.type == 'buy_and_use' and 'buy_and_use' or nil, ref_table = args.card, ref_parent = args.parent, align =  (args.type == 'sell' or args.type == 'redeem') and 'cl' or 'cr', colour = G.C.BLACK, shadow = true, r = 0.08, func = args.func, one_press = true, button = args.button, focus_args = {type = 'none'}, hover = true}, nodes={
+          {n=G.UIT.R, config={align = (args.type == 'sell' or args.type == 'redeem') and 'cl' or 'cr', minw = 1 + (args.type == 'select' and 0.1 or 0), minh = args.type == 'sell' and 1.5 or 1, padding = 0.08,
+              focus_args = {button = (args.type == 'sell' or args.type == 'redeem') and 'leftshoulder' or args.type == 'buy_and_use' and 'leftshoulder' or 'rightshoulder', scale = 0.55, orientation = (args.type == 'sell' or args.type == 'redeem') and 'tli' or 'tri', offset = {x = (args.type == 'sell' or args.type == 'redeem') and 0.1 or -0.1, y = 0}, type = 'none'},
+              func = 'set_button_pip'}, nodes={
+            {n=G.UIT.R, config={align = "cm", minh = 0.3}, nodes={}},
+            {n=G.UIT.R, config={align = "cm"}, nodes={
+              args.type ~= 'sell' and {n=G.UIT.C, config={align = "cm",minw = 0.2, minh = 0.6}, nodes={}} or nil,
+              {n=G.UIT.C, config={align = "cm", maxw = 1}, nodes={
+                button_contents
+              }},
+              args.type == 'sell' and {n=G.UIT.C, config={align = "cm",minw = 0.2, minh = 0.6}, nodes={}} or nil,
+            }}
+          }}
+        }}
+      }},
+    config = {
+      align = (args.type == 'sell' or args.type == 'redeem') and 'cl' or 'cr',
+      offset = {x=((args.type == 'sell' or args.type == 'redeem') and -1 or 1)*((args.card_width or 0) - 0.17 - args.card.T.w/2),y=args.type == 'buy_and_use' and 0.6 or (args.buy_and_use) and -0.6 or 0},
+      parent = args.parent,
+    }
+  }
+end
+
 local can_use_ref = Card.can_use_consumeable
 function Card:can_use_consumeable(any_state, skip_check)
     if not self.ability.consumeable then return false end

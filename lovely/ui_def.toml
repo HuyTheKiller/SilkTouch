@@ -1,0 +1,28 @@
+[manifest]
+dump_lua = true
+priority = 0
+version = "1.0.0"
+
+[[patches]]
+[patches.pattern]
+target = "functions/UI_definitions.lua"
+pattern = '''
+function G.UIDEF.card_focus_ui(card)
+'''
+position = "before"
+payload = '''
+-- Function overridden by SilkTouch in src/util.lua
+'''
+match_indent = true
+
+[[patches]]
+[patches.pattern]
+target = "functions/UI_definitions.lua"
+pattern = '''
+function G.UIDEF.card_focus_button(args)
+'''
+position = "before"
+payload = '''
+-- Function overridden by SilkTouch in src/util.lua
+'''
+match_indent = true

@@ -93,7 +93,7 @@ position = "after"
 payload = '''
 if self.is_cursor_down then 
     self.cursor_down.distance = math.max(Vector_Dist(self.cursor_down.T, self.cursor_hover.T), self.cursor_down.distance or 0)
-    self.cursor_down.duration = G.TIMERS.UPTIME - self.cursor_down.uptime
+    self.cursor_down.duration = G.TIMERS.UPTIME - (self.cursor_down.uptime or 0)
     if self.cursor_up.target then
         self.cursor_up.target = nil
     end

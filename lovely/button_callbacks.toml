@@ -1,0 +1,16 @@
+[manifest]
+dump_lua = true
+priority = 0
+version = "1.0.0"
+
+[[patches]]
+[patches.pattern]
+target = "functions/button_callbacks.lua"
+pattern = '''
+G.FUNCS.can_select_card = function(e)
+'''
+position = "before"
+payload = '''
+-- Function overridden by SilkTouch in src/util.lua
+'''
+match_indent = true
