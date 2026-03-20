@@ -3,6 +3,18 @@ A Balatro mod that brings touch controls from mobile version to PC/Mac.
 
 There are 2 other mods - [Sticky Fingers](https://github.com/eramdam/sticky-fingers) and [MobileLikeDragging](https://github.com/jfmmm/BalatroMobileLikeDragging) - that already do the same thing. What sets this mod apart is that it provides a full-fledged API, allowing other mods to easily define new drag areas and/or use existing ones, all without a Pull Request hassle from Sticky Fingers or vanilla-hardcoded nature of MobileLikeDragging.
 
+# How to use this mod
+In your mod code, put a check to see if the player has SilkTouch installed.
+```lua
+if SilkTouch then
+    SilkTouch.DragTarget{
+        key = "my_drag_area",
+        -- More on that below
+    }
+end
+```
+You can then start adding your own drag areas. See below for documentation.
+
 # API Documentation: `SilkTouch.DragTarget`
 
 - **Required parameters:**
