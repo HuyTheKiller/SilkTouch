@@ -465,7 +465,7 @@ function create_drag_target_from_card(_card)
     end
 
     if _card.area and (_card.area == G.shop_jokers or _card.area == G.shop_vouchers or _card.area == G.shop_booster) then
-      local buy_loc = copy_table(localize((_card.area == G.shop_vouchers and 'ml_redeem_target') or (_card.area == G.shop_booster and 'ml_open_target') or 'ml_buy_target'))
+      local buy_loc = copy_table(localize((_card.ability.set == "Voucher" and 'ml_redeem_target') or (_card.ability.set == "Booster" and 'ml_open_target') or 'ml_buy_target'))
       buy_loc[#buy_loc + 1] = '$'.._card.cost
       drag_target({ cover = G.DRAG_TARGETS.S_buy, colour = adjust_alpha(G.C.GREEN, (G.SETTINGS.drag_area_opacity / 100)), text = buy_loc,
         card = _card,
