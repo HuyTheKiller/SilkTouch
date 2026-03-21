@@ -41,12 +41,7 @@ end
 
 function SilkTouch.can_select(_card)
     local temp_config = {UIBox = {states = {visible = false}}, config = {ref_table = _card}}
-    if _card.ability.set == "Joker" or _card.ability.set == "Planet"
-    or _card.ability.set == "Default" or _card.ability.set == "Enhanced" then
-        G.FUNCS.can_select_card(temp_config)
-    elseif SMODS and _card.ability.consumeable then
-        G.FUNCS.can_select_from_booster(temp_config)
-    end
+    G.FUNCS.can_select_card(temp_config)
     return temp_config.config.button ~= nil
 end
 
