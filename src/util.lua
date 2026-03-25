@@ -461,7 +461,7 @@ function create_drag_target_from_card(_card)
 
     if _card.area and (_card.area == G.shop_jokers or _card.area == G.shop_vouchers or _card.area == G.shop_booster) then
       local buy_loc = copy_table(localize((_card.ability.set == "Voucher" and 'ml_redeem_target') or (_card.ability.set == "Booster" and 'ml_open_target') or 'ml_buy_target'))
-      buy_loc[#buy_loc + 1] = '$'.._card.cost
+      buy_loc[#buy_loc + 1] = localize('$').._card.cost
       drag_target({ cover = G.DRAG_TARGETS.S_buy, colour = adjust_alpha(G.C.GREEN, (G.SETTINGS.drag_area_opacity / 100)), text = buy_loc,
         card = _card,
         active_check = function(other)
@@ -487,7 +487,7 @@ function create_drag_target_from_card(_card)
 
       if SilkTouch.can_buy_and_use(_card) then
         local buy_use_loc = copy_table(localize('ml_buy_and_use_target'))
-        buy_use_loc[#buy_use_loc + 1] = '$'.._card.cost
+        buy_use_loc[#buy_use_loc + 1] = localize('$').._card.cost
         drag_target({ cover = G.DRAG_TARGETS.S_buy_and_use, colour = adjust_alpha(G.C.ORANGE, (G.SETTINGS.drag_area_opacity / 100)),text=buy_use_loc,
           card = _card,
           active_check = (function(other)
@@ -537,7 +537,7 @@ function create_drag_target_from_card(_card)
 
     if _card.area and (_card.area == G.jokers or _card.area == G.consumeables) then
       local sell_loc = copy_table(localize('ml_sell_target'))
-      sell_loc[#sell_loc + 1] = '$'..(_card.facing == 'back' and '?' or _card.sell_cost)
+      sell_loc[#sell_loc + 1] = localize('$').._card.sell_cost_label
       drag_target({ cover = _card.area == G.consumeables and G.DRAG_TARGETS.C_sell or G.DRAG_TARGETS.J_sell, colour = adjust_alpha(G.C.GOLD, (G.SETTINGS.drag_area_opacity / 100)),text = sell_loc,
         card = _card,
         active_check = function(other)

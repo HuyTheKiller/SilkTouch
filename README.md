@@ -61,7 +61,7 @@ This version is packed with a brand new API: `SilkTouch.ControllerButton`, allow
             text = function(card)
                 -- Example text for a joker or consumable
                 local buy_loc = copy_table(localize('ml_buy_target'))
-                buy_loc[#buy_loc+1] = '$'..card.cost
+                buy_loc[#buy_loc+1] = localize('$')..card.cost
                 return buy_loc -- {"Buy", "$3"}
             end
         }
