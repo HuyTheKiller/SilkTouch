@@ -183,7 +183,7 @@ function G.UIDEF.card_focus_ui(card)
   for side, items in pairs(realignment) do
     if #items > 1 then
       for i, v in ipairs(items) do
-        total_height[side] = total_height[side] + v.silktouch_utils.minh
+        total_height[side] = total_height[side] + v.UIRoot.children[1].children[1].T.h
         if i > 1 then
           total_height[side] = total_height[side] + 0.2
         end
@@ -197,8 +197,8 @@ function G.UIDEF.card_focus_ui(card)
         if i == 1 then
           leftmost_free = -total_height[side]/2
         end
-        v.alignment.offset.y = leftmost_free + v.silktouch_utils.minh/2
-        leftmost_free = leftmost_free + v.silktouch_utils.minh + 0.2
+        v.alignment.offset.y = leftmost_free + v.UIRoot.children[1].children[1].T.h/2
+        leftmost_free = leftmost_free + v.UIRoot.children[1].children[1].T.h + 0.2
       end
     end
   end
@@ -316,7 +316,6 @@ function G.UIDEF.card_focus_button(args)
           }
         }
         uibox.silktouch_utils = {
-          minw = minw, minh = minh,
           side = v.side, index = args.index,
           max_index = args.max_index
         }
