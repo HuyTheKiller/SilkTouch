@@ -327,9 +327,9 @@ function G.UIDEF.card_focus_button(args)
     T = {args.card.VT.x,args.card.VT.y,0,0},
     definition =
       {n=G.UIT.ROOT, config = {align = 'cm', colour = G.C.CLEAR}, nodes={
-        {n=G.UIT.R, config={id = args.type == 'buy_and_use' and 'buy_and_use' or nil, ref_table = args.card, ref_parent = args.parent, align =  (args.type == 'sell' or args.type == 'redeem') and 'cl' or 'cr', colour = G.C.BLACK, shadow = true, r = 0.08, func = args.func, one_press = true, button = args.button, focus_args = {type = 'none'}, hover = true}, nodes={
-          {n=G.UIT.R, config={align = (args.type == 'sell' or args.type == 'redeem') and 'cl' or 'cr', minw = 1 + (args.type == 'select' and 0.1 or 0), minh = args.type == 'sell' and 1.5 or 1, padding = 0.08,
-              focus_args = {button = (args.type == 'sell' or args.type == 'redeem') and 'leftshoulder' or args.type == 'buy_and_use' and 'leftshoulder' or 'rightshoulder', scale = 0.55, orientation = (args.type == 'sell' or args.type == 'redeem') and 'tli' or 'tri', offset = {x = (args.type == 'sell' or args.type == 'redeem') and 0.1 or -0.1, y = 0}, type = 'none'},
+        {n=G.UIT.R, config={id = args.type == 'buy_and_use' and 'buy_and_use' or nil, ref_table = args.card, ref_parent = args.parent, align =  args.type == 'sell' and 'cl' or 'cr', colour = G.C.BLACK, shadow = true, r = 0.08, func = args.func, one_press = true, button = args.button, focus_args = {type = 'none'}, hover = true}, nodes={
+          {n=G.UIT.R, config={align = args.type == 'sell' and 'cl' or 'cr', minw = 1 + (args.type == 'select' and 0.1 or 0), minh = args.type == 'sell' and 1.5 or 1, padding = 0.08,
+              focus_args = {button = args.type == 'sell' and 'leftshoulder' or args.type == 'buy_and_use' and 'leftshoulder' or 'rightshoulder', scale = 0.55, orientation = args.type == 'sell' and 'tli' or 'tri', offset = {x = args.type == 'sell' and 0.1 or -0.1, y = 0}, type = 'none'},
               func = 'set_button_pip'}, nodes={
             {n=G.UIT.R, config={align = "cm", minh = 0.3}, nodes={}},
             {n=G.UIT.R, config={align = "cm"}, nodes={
@@ -343,8 +343,8 @@ function G.UIDEF.card_focus_button(args)
         }}
       }},
     config = {
-      align = (args.type == 'sell' or args.type == 'redeem') and 'cl' or 'cr',
-      offset = {x=((args.type == 'sell' or args.type == 'redeem') and -1 or 1)*((args.card_width or 0) - 0.17 - args.card.T.w/2),y=args.type == 'buy_and_use' and 0.6 or (args.buy_and_use) and -0.6 or 0},
+      align = args.type == 'sell' and 'cl' or 'cr',
+      offset = {x=(args.type == 'sell' and -1 or 1)*((args.card_width or 0) - 0.17 - args.card.T.w/2),y=args.type == 'buy_and_use' and 0.6 or (args.buy_and_use) and -0.6 or 0},
       parent = args.parent,
     }
   }
