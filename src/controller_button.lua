@@ -8,7 +8,7 @@ SilkTouch.ControllerButton = SMODS.GameObject:extend{
     },
     side = "left",
     button_key = "leftshoulder",
-    button_order = 1,
+    button_order = 0,
     text = function(card) return { "test" } end,
     text_scale = function() return { 0.4 } end,
     colour = G.C.GREEN,
@@ -48,7 +48,7 @@ SilkTouch.ControllerButton{
     prefix_config = {key = false},
     side = "right",
     button_key = "rightshoulder",
-    button_order = 1,
+    button_order = 0,
     text = function(card)
         return {
             localize('b_buy'),
@@ -70,7 +70,7 @@ SilkTouch.ControllerButton{
     prefix_config = {key = false},
     side = "right",
     button_key = "leftshoulder",
-    button_order = 2,
+    button_order = 1,
     text = function(card)
         return {
             localize('b_buy'),
@@ -96,7 +96,7 @@ SilkTouch.ControllerButton{
     prefix_config = {key = false},
     side = "left",
     button_key = "leftshoulder",
-    button_order = 1,
+    button_order = 0,
     text = function(card)
         return {
             localize('b_redeem'),
@@ -119,7 +119,7 @@ SilkTouch.ControllerButton{
     prefix_config = {key = false},
     side = "right",
     button_key = "rightshoulder",
-    button_order = 1,
+    button_order = 0,
     text = function(card)
         return {
             localize('b_open'),
@@ -143,7 +143,7 @@ SilkTouch.ControllerButton{
     prefix_config = {key = false},
     side = "right",
     button_key = "rightshoulder",
-    button_order = 1,
+    button_order = 0,
     text = function(card)
         return {
             localize('b_use'),
@@ -170,7 +170,7 @@ SilkTouch.ControllerButton{
     prefix_config = {key = false},
     side = "right",
     button_key = "rightshoulder",
-    button_order = 1,
+    button_order = 0,
     text = function(card)
         return {
             localize('b_select'),
@@ -197,7 +197,7 @@ SilkTouch.ControllerButton{
     prefix_config = {key = false},
     side = "left",
     button_key = "leftshoulder",
-    button_order = 1,
+    button_order = 0,
     text = function(card)
         return {
             localize('b_sell'),
