@@ -2,6 +2,7 @@
 
 ---@class SilkTouch.ControllerButton: SMODS.GameObject
 ---@field side? "left"|"right" Where to align this button. Due to limited choices, only "left" and "right" are supported.
+---@field get_side? fun(card: table|Card): "left"|"right" Used for finer control over which side this button will align.
 ---@field button_key? "a"|"b"|"x"|"y"|"leftshoulder"|"rightshoulder"|"triggerleft"|"triggerright"|"start"|"back"|"dpadup"|"dpadright"|"dpaddown"|"dpadleft"|"left"|"right"|"leftstick"|"rightstick"|"guide" The key to a button/stick on the controller.
 ---@field button_order? integer Alignment order for this button (lower number means higher order from top to bottom).
 ---@field text? fun(card: table|Card): table|{single_text?: true} A function returning a table of localized texts. Append `single_text` field to the return table to shorten node creation.

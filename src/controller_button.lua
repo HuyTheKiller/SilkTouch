@@ -46,7 +46,9 @@ SilkTouch.ControllerButton = SMODS.GameObject:extend{
 SilkTouch.ControllerButton{
     key = "buy",
     prefix_config = {key = false},
-    side = "right",
+    get_side = function(card)
+        return card:align_h_popup().type == "cr" and "left" or "right"
+    end,
     button_key = "rightshoulder",
     button_order = 0,
     text = function(card)
@@ -68,7 +70,9 @@ SilkTouch.ControllerButton{
 SilkTouch.ControllerButton{
     key = "buy_and_use",
     prefix_config = {key = false},
-    side = "right",
+    get_side = function(card)
+        return card:align_h_popup().type == "cr" and "left" or "right"
+    end,
     button_key = "leftshoulder",
     button_order = 1,
     text = function(card)
@@ -94,8 +98,10 @@ SilkTouch.ControllerButton{
 SilkTouch.ControllerButton{
     key = "redeem",
     prefix_config = {key = false},
-    side = "left",
-    button_key = "leftshoulder",
+    get_side = function(card)
+        return card:align_h_popup().type == "cr" and "left" or "right"
+    end,
+    button_key = "rightshoulder",
     button_order = 0,
     text = function(card)
         return {
@@ -117,7 +123,9 @@ SilkTouch.ControllerButton{
 SilkTouch.ControllerButton{
     key = "open",
     prefix_config = {key = false},
-    side = "right",
+    get_side = function(card)
+        return card:align_h_popup().type == "cr" and "left" or "right"
+    end,
     button_key = "rightshoulder",
     button_order = 0,
     text = function(card)

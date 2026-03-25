@@ -100,8 +100,9 @@ function G.UIDEF.card_focus_ui(card)
 
   for k, v in pairs(SilkTouch.ControllerButtons or {}) do
     if v.focus_condition and v.focus_condition(card) then
-      if v.side == "left" or v.side == "right" then
-        base_attach.config.align_count[v.side] = base_attach.config.align_count[v.side] + 1
+      local side = v.get_side and v.get_side(card) or v.side
+      if side == "left" or side == "right" then
+        base_attach.config.align_count[side] = base_attach.config.align_count[side] + 1
         table.insert(passed, {[k] = v, silktouch_order = v.button_order})
       end
     end
@@ -247,7 +248,8 @@ function G.UIDEF.card_focus_button(args)
   if not next(button_contents) then
     for k, v in pairs(SilkTouch.ControllerButtons or {}) do
       if args.type == k then
-        button_contents = {n=G.UIT.C, config={align = v.side == "left" and "cl" or "cr"}, nodes={}}
+        local side = v.get_side and v.get_side(args.card) or v.side
+        button_contents = {n=G.UIT.C, config={align = side == "left" and "cl" or "cr"}, nodes={}}
         local text_table = v.text and v.text(args.card) or {}
         local text_scale_table = v.text_scale and v.text_scale()
         if text_table.single_text then
@@ -259,7 +261,7 @@ function G.UIDEF.card_focus_button(args)
           end
         else
           for i, text in ipairs(text_table) do
-            local node = {n=G.UIT.R, config={align = v.side == "left" and "cl" or "cr", maxw = 1}, nodes={}}
+            local node = {n=G.UIT.R, config={align = side == "left" and "cl" or "cr", maxw = 1}, nodes={}}
             if type(text) == "table" and type(text_scale_table[i]) == "table" then
               node.config.maxw = nil
               for j, inner_text in ipairs(text) do
@@ -292,9 +294,9 @@ function G.UIDEF.card_focus_button(args)
           T = {args.card.VT.x,args.card.VT.y,0,0},
           definition =
             {n=G.UIT.ROOT, config = {align = 'cm', colour = G.C.CLEAR}, nodes={
-              {n=G.UIT.R, config={id = k, ref_table = args.card, ref_parent = args.parent, align = v.side == "left" and 'cl' or 'cr', colour = G.C.BLACK, shadow = true, r = 0.08, func = args.func, one_press = true, button = args.button, focus_args = {type = 'none'}, hover = true}, nodes={
-                {n=G.UIT.R, config={align = v.side == "left" and 'cl' or 'cr', minw = minw, minh = minh, padding = 0.08,
-                    focus_args = {button = v.button_key, scale = 0.55, orientation = v.side == "left" and 'tli' or 'tri', offset = {x = v.side == "left" and 0.1 or -0.1, y = 0}, type = 'none'},
+              {n=G.UIT.R, config={id = k, ref_table = args.card, ref_parent = args.parent, align = side == "left" and 'cl' or 'cr', colour = G.C.BLACK, shadow = true, r = 0.08, func = args.func, one_press = true, button = args.button, focus_args = {type = 'none'}, hover = true}, nodes={
+                {n=G.UIT.R, config={align = side == "left" and 'cl' or 'cr', minw = minw, minh = minh, padding = 0.08,
+                    focus_args = {button = v.button_key, scale = 0.55, orientation = side == "left" and 'tli' or 'tri', offset = {x = side == "left" and 0.1 or -0.1, y = 0}, type = 'none'},
                     func = 'set_button_pip'}, nodes={
                   {n=G.UIT.R, config={align = "cm", minh = 0.3}, nodes={}},
                   {n=G.UIT.R, config={align = "cm"}, nodes={
@@ -308,8 +310,8 @@ function G.UIDEF.card_focus_button(args)
               }}
             }},
           config = {
-            align = v.side == "left" and 'cl' or 'cr',
-            offset = {x=(v.side == "left" and -1 or 1)*((args.card_width or 0) - 0.17 - args.card.T.w/2),y=args.type == 'buy_and_use' and 0.6 or (args.buy_and_use) and -0.6 or 0},
+            align = side == "left" and 'cl' or 'cr',
+            offset = {x=(side == "left" and -1 or 1)*((args.card_width or 0) - 0.17 - args.card.T.w/2),y=args.type == 'buy_and_use' and 0.6 or (args.buy_and_use) and -0.6 or 0},
             parent = args.parent,
           }
         }

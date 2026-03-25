@@ -106,6 +106,16 @@ This version is packed with a brand new API: `SilkTouch.ControllerButton`, allow
 	- `key`
 - **Optional parameters** *(defaults)*:
     - `side = "left"`: The side the button will be on when it's available, either `"left"` or `"right"`
+    - `get_side`: Used for finer control over which side this button will align
+        - Expects a function like this:
+        ```lua
+        {
+            -- An example of dynamic side choice based on the description popup's alignment, used for cards in shop areas
+            get_side = function(card)
+                return card:align_h_popup().type == "cr" and "left" or "right"
+            end
+        }
+        ```
     - `button_key = "leftshoulder"`: The key to the controller input needed to activate this button
         - Expects any of the following keys:
         ```lua
