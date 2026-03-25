@@ -111,9 +111,10 @@ function G.UIDEF.card_focus_ui(card)
   for i, button in ipairs(passed) do
     for k, v in pairs(button) do
       if k ~= "silktouch_order" then
+        local side = v.get_side and v.get_side(card) or v.side
         base_attach.children[k] = G.UIDEF.card_focus_button{
           card = card, parent = base_attach, type = k, func = v.active_check_cb, button = v.press_func_cb,
-          card_width = card_width*v.card_width_coeffi, max_index = base_attach.config.align_count[v.side], index = i
+          card_width = card_width*v.card_width_coeffi, max_index = base_attach.config.align_count[side], index = i
         }
       end
     end
