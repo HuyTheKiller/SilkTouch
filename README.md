@@ -126,8 +126,7 @@ This version is packed with a brand new API: `SilkTouch.ControllerButton`, allow
             "left", "right", "leftstick", "rightstick", "guide",
         }
         ```
-    - `button_order = 0`: The order of this button when aligning multiple ones on either side (smallest order is placed on top)
-        - It's recommended for your custom buttons to start at 2
+    - `button_order = 0`: The order of this button when aligning multiple ones on either side (smallest order is placed on top, vanilla buttons occupy -2 and -1)
     - `text`: A function returning a table of localized texts
         - Expects a function like this:
         ```lua
