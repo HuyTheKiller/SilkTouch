@@ -222,9 +222,9 @@ SilkTouch.ControllerButton{
         }
     end,
     focus_condition = function(card)
-        return G.STAGE == G.STAGES.RUN and card.area and card.area ~= G.shop_jokers and card.area ~= G.shop_vouchers
-        and card.area ~= G.shop_booster and card.area ~= G.pack_cards and card.ability.set ~= "Default" and card.ability.set ~= "Enhanced"
-        and G.STATE ~= G.STATES.TUTORIAL
+        return G.STAGE == G.STAGES.RUN and card.area and not card.area.config.collection and card.area ~= G.shop_jokers
+        and card.area ~= G.shop_vouchers and card.area ~= G.shop_booster and card.area ~= G.pack_cards
+        and card.ability.set ~= "Default" and card.ability.set ~= "Enhanced" and G.STATE ~= G.STATES.TUTORIAL
     end,
     active_check_cb = "can_sell_card",
     press_func_cb = "sell_card",
