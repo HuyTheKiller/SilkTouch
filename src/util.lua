@@ -316,7 +316,7 @@ function G.UIDEF.card_focus_button(args)
           }
         }
         uibox.silktouch_utils = {
-          side = v.side, index = args.index,
+          side = side, index = args.index,
           max_index = args.max_index
         }
         return uibox
