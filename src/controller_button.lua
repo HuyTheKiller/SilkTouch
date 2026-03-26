@@ -166,8 +166,8 @@ SilkTouch.ControllerButton{
                 return false
             end
         end
-        return G.STAGE == G.STAGES.RUN and card.area and card.area ~= G.shop_jokers and card.area ~= G.shop_vouchers
-        and card.area ~= G.shop_booster and card.ability.consumeable
+        return G.STAGE == G.STAGES.RUN and card.area and not card.area.config.collection and card.area.config.type ~= "title_2"
+        and card.area ~= G.shop_jokers and card.area ~= G.shop_vouchers and card.area ~= G.shop_booster and card.ability.consumeable
     end,
     active_check_cb = "can_use_consumeable",
     press_func_cb = "use_card",
