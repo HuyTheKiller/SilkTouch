@@ -60,6 +60,12 @@ if not self.cursor_down.handled then
 '''
 position = "after"
 payload = '''
+    if self.HID.touch then
+        if self.cursor_hover.target and self.cursor_hover.target.states.hover.can then
+            self.finger_focus = self.cursor_hover.target
+        end
+        self.touch_control.clear_touch = true
+    end
     self.cursor_down.distance = 0
     self.cursor_down.duration = 0
 '''
@@ -73,7 +79,35 @@ pattern = '''
 '''
 position = "before"
 payload = '''
- --The object being dragged
+if self.HID.touch then
+    if self.finger_focus and not self.finger_focus:can_long_press() then
+        if self.finger_focus ~= self.hovering.target and self.finger_focus:can_hover_on_drag() then
+            self.hovering.target = self.finger_focus
+            self.hovering.handled = false
+        end
+    end
+
+    if not self.touch_control.l_press.handled then
+        self.hovering.target = self.touch_control.l_press.target
+        self.hovering.handled = false
+        self.touch_control.l_pressed = self.finger_focus
+        self.touch_control.l_press.handled = true
+    end
+
+    if self.touch_control.clear_touch or not self.finger_focus then
+        self.touch_control.l_press.target = nil
+        self.touch_control.l_pressed = nil
+        self.touch_control.s_tap.target = nil
+        self.hovering.target = nil
+
+        self.hovering.handled = false
+        self.touch_control.clear_touch = nil
+    end
+
+    if self.touch_control.l_pressed then
+        self.hovering.target = self.finger_focus
+    end
+end
 if not self.dragging.handled and self.cursor_down.duration and (self.cursor_down.duration > 0.1) then
     create_drag_target_from_card(self.dragging.target)
     self.dragging.handled = true
@@ -112,34 +146,33 @@ match_indent = true
 [patches.pattern]
 target = "engine/controller.lua"
 pattern = '''
-    --if not, was the Cursor dragging some other thing?
-    elseif self.dragging.prev_target and self.cursor_up.target and self.cursor_up.target.states.release_on.can then 
-        self.released_on.target = self.cursor_up.target
-        self.released_on.handled = false
-    end
+self.hovering.target.states.hover.is = false
+self.hovering.target = nil
+'''
+position = "at"
+payload = '''
+if self.HID.touch and not self.hovering.target:can_long_press() then
+else
+    self.hovering.target.states.hover.is = false
+    self.hovering.target = nil
 end
 '''
-position = "after"
-payload = '''
+match_indent = true
 
-if self.cursor_down.distance < G.MIN_CLICK_DIST and self.cursor_down.duration < 0.2 then 
-    if self.cursor_down.target.states.click.can and not self.touch_control.l_press.target then
-        self.touch_control.s_tap.target = self.cursor_down.target
-        self.touch_control.s_tap.time = self.cursor_up.time - self.cursor_down.time
-        self.touch_control.s_tap.handled = false
-    end
---if not, was the Cursor dragging some other thing?
-elseif self.dragging.prev_target then 
-    local releasable = nil
-    for _, v in ipairs(self.collision_list) do
-        if v.states.hover.can and (not v.states.drag.is) and (v ~= self.dragging.prev_target) then
-            releasable = v
-            break 
+[[patches]]
+[patches.pattern]
+target = "engine/controller.lua"
+pattern = '''
+--Cursor is currently hovering over something
+'''
+position = "before"
+payload = '''
+if self.HID.touch then
+    if self.finger_focus then
+        if self.is_cursor_down and self.finger_focus:can_long_press() and self.cursor_down.duration > (0.2 * G.SPEEDFACTOR) and not self.touch_control.l_press.target and not self.touch_control.l_pressed then
+            self.touch_control.l_press.target = self.finger_focus
+            self.touch_control.l_press.handled = false
         end
-    end
-    if releasable and releasable.states.release_on.can then 
-        self.released_on.target = releasable
-        self.released_on.handled = false
     end
 end
 '''

@@ -1,0 +1,12 @@
+[manifest]
+version = "1.0.0"
+dump_lua = true
+priority = 1
+
+[[patches]]
+[patches.pattern]
+target = "engine/sprite.lua"
+pattern = "G.SHADERS[_shader or 'dissolve']:send('hovering',((_shadow_height  and not tilt_shadow) or _no_tilt) and 0 or (_draw_major.hover_tilt or 0)*(tilt_shadow or 1))"
+position = "at"
+payload = "G.SHADERS[_shader or 'dissolve']:send('hovering',((_shadow_height  and not tilt_shadow) or _no_tilt) and 0 or (not G.CONTROLLER.HID.touch and _draw_major.hover_tilt or 0)*(tilt_shadow or 1))"
+match_indent = false

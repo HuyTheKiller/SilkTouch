@@ -1,5 +1,39 @@
 SilkTouch = {}
 
+function Node:can_long_press() end
+
+function Node:can_hover_on_drag() return true end
+
+function Card:can_long_press()
+    if self.area and ((self.area == G.hand) or
+    ( self.area == G.deck and self.area.cards[1] == self)) then
+        return true
+    end
+end
+
+function Card:can_hover_on_drag()
+    return false
+end
+
+local node_stop_drag = Node.stop_drag
+function Node:stop_drag()
+    node_stop_drag(self)
+    if G and G.CONTROLLER and G.CONTROLLER.cursor_down.duration
+    and G.CONTROLLER.cursor_down.duration > 0.1 then
+        self.states.hover.is = false
+        G.CONTROLLER.hovering.target = nil
+    end
+end
+
+local controller_upd_axis = Controller.update_axis
+function Controller:update_axis(dt)
+    local ret = controller_upd_axis(self, dt)
+    if SilkTouch.force_touch then
+        ret = "touch"
+    end
+    return ret
+end
+
 if G.SETTINGS.enable_action_buttons == nil then
     G.SETTINGS.enable_action_buttons = true
 end
