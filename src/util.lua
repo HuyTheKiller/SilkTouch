@@ -5,8 +5,8 @@ function Node:can_long_press() end
 function Node:can_hover_on_drag() return true end
 
 function Card:can_long_press()
-    if self.area and ((self.area == G.hand) or
-    ( self.area == G.deck and self.area.cards[1] == self)) then
+    if self.area and ((self.area == G.hand) or (self.area == G.play) or
+    (self.area == G.deck and self.area.cards[1] == self)) then
         return true
     end
 end
