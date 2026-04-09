@@ -553,7 +553,11 @@ function create_drag_target_from_card(_card)
           end
         })
       else
-        drag_target({ cover = G.DRAG_TARGETS.P_select, colour = adjust_alpha(G.C.GREEN, (G.SETTINGS.drag_area_opacity / 100)), text = {localize('b_select')},
+        local select_text = localize('b_select')
+        if SMODS and booster_obj then
+          select_text = SMODS.get_select_text(_card, booster_obj) or localize('b_select')
+        end
+        drag_target({ cover = G.DRAG_TARGETS.P_select, colour = adjust_alpha(G.C.GREEN, (G.SETTINGS.drag_area_opacity / 100)), text = {select_text},
           card = _card,
           active_check = function(other)
             return SilkTouch.can_select(other)
