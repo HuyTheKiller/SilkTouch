@@ -15,16 +15,6 @@ function Card:can_hover_on_drag()
     return false
 end
 
-local node_stop_drag = Node.stop_drag
-function Node:stop_drag()
-    node_stop_drag(self)
-    if G and G.CONTROLLER and G.CONTROLLER.cursor_down.duration
-    and G.CONTROLLER.cursor_down.duration > 0.1 then
-        self.states.hover.is = false
-        G.CONTROLLER.hovering.target = nil
-    end
-end
-
 local controller_upd_axis = Controller.update_axis
 function Controller:update_axis(dt)
     local ret = controller_upd_axis(self, dt)
@@ -40,6 +30,9 @@ end
 if G.SETTINGS.enable_dragging == nil then
     G.SETTINGS.enable_dragging = true
 end
+if G.SETTINGS.enable_drag_select == nil then
+    G.SETTINGS.enable_drag_select = true
+end
 G.SETTINGS.drag_area_opacity = G.SETTINGS.drag_area_opacity or 90
 
 function SilkTouch.config_tab()
@@ -47,6 +40,8 @@ function SilkTouch.config_tab()
     and localize("ph_enable_dragging") or "Enable Dragging"
     local action_button_label = localize("ph_enable_action_button") ~= "ERROR"
     and localize("ph_enable_action_button") or "Enable Actions Buttons"
+    local drag_to_select_deselect_label = localize("ph_drag_to_select_deselect") ~= "ERROR"
+    and localize("ph_drag_to_select_deselect") or "Enable drag to select/deselect from hand area"
     local drag_area_op_label = localize("ph_drag_area_op") ~= "ERROR"
     and localize("ph_drag_area_op") or "Drag Area Opacity"
     return {n=G.UIT.ROOT, config={align = "cm", padding = 0.05, colour = G.C.CLEAR}, nodes={
@@ -57,6 +52,7 @@ function SilkTouch.config_tab()
             end
         end}),
         create_toggle({label = action_button_label, ref_table = G.SETTINGS, ref_value = 'enable_action_buttons'}),
+        create_toggle({label = drag_to_select_deselect_label, ref_table = G.SETTINGS, ref_value = 'enable_drag_select'}),
         create_slider({label = drag_area_op_label, w = 5, h = 0.4, ref_table = G.SETTINGS, ref_value = 'drag_area_opacity', min = 0, max = 100}),
     }}
 end
