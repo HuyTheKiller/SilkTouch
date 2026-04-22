@@ -25,13 +25,13 @@ function Controller:update_axis(dt)
 end
 
 if G.SETTINGS.enable_action_buttons == nil then
-    G.SETTINGS.enable_action_buttons = true
+    G.SETTINGS.enable_action_buttons = not (love.system.getOS() == 'Android' or love.system.getOS() == 'iOS')
 end
 if G.SETTINGS.enable_dragging == nil then
     G.SETTINGS.enable_dragging = true
 end
 if G.SETTINGS.enable_drag_select == nil then
-    G.SETTINGS.enable_drag_select = true
+    G.SETTINGS.enable_drag_select = love.system.getOS() == 'Android' or love.system.getOS() == 'iOS' or not Handy
 end
 G.SETTINGS.drag_area_opacity = G.SETTINGS.drag_area_opacity or 90
 
