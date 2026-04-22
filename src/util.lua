@@ -1,6 +1,6 @@
-SilkTouch = {
-    OS = love.system.getOS(),
-}
+SilkTouch = {}
+
+SilkTouch.OS = love.system.getOS()
 
 function Node:can_long_press() end
 
