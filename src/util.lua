@@ -489,6 +489,8 @@ function create_drag_target_from_card(_card)
             init_args.T[kk] = init_args.T[kk] + (vv.mod_value or 0)
           end
           G.DRAG_TARGETS[k] = Moveable(init_args)
+        elseif type(v.moveable_t) == "function" then
+          G.DRAG_TARGETS[k] = v.moveable_t()
         end
       end
     end

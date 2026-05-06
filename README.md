@@ -23,7 +23,7 @@ This version is packed with a brand new API: `SilkTouch.ControllerButton`, allow
 - **Required parameters:**
 	- `key`
 - **Optional parameters** *(defaults)*:
-    - `moveable_t`: A string key to an existing drag area, or a table containing a Moveable setup
+    - `moveable_t`: A string key to an existing drag area, or a table containing a Moveable setup, or a function returning a Moveable object
         - Expects a string matching any of the following keys:
         ```lua
         G.DRAG_TARGETS = {
@@ -36,7 +36,7 @@ This version is packed with a brand new API: `SilkTouch.ControllerButton`, allow
             modprefix_key, -- A custom drag target, defined by a Moveable setup (more on that below).
         }
         ```
-        - Or, expects the following table format:
+        - Or, expects the following table format (obsolete method kept for backward compatibility):
         ```lua
         {
             moveable_t = {
@@ -52,6 +52,21 @@ This version is packed with a brand new API: `SilkTouch.ControllerButton`, allow
                 },
                 h = {mod_value = 4.5}, -- Simply specify a number.
             },
+        }
+        ```
+        - Or, expects a function returning a Moveable object:
+        ```lua
+        {
+            moveable_t = function()
+                return Moveable{
+                    T = {
+                        x = G.jokers.T.x,
+                        y = G.jokers.T.y - 0.1,
+                        w = G.consumeables.T.x + G.consumeables.T.w - G.jokers.T.x,
+                        h = 4.5
+                    }
+                }
+            end,
         }
         ```
     - `text`: A function returning a table of localized texts

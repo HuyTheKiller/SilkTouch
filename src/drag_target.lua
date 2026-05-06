@@ -17,7 +17,7 @@ SilkTouch.DragTarget = SMODS.GameObject:extend{
     active_check = function(card) return true end,
     release_func = function(card) G.DEBUG_VALUE = 'WORKIN' end,
     inject = function(self)
-        assert(type(self.moveable_t) == "string" or type(self.moveable_t) == "table", ("Field \"moveable_t\" must be a string or a table."))
+        assert(type(self.moveable_t) == "string" or type(self.moveable_t) == "table" or type(self.moveable_t) == "function", ("Field \"moveable_t\" must be a string, a table or a function."))
         if type(self.moveable_t) == "table" then
             local function valid_index(key)
                 for _, v in ipairs{"x", "y", "w", "h"} do

@@ -7,7 +7,7 @@
 ---@field mod_value? number
 
 ---@class SilkTouch.DragTarget: SMODS.GameObject
----@field moveable_t? string|{x: MoveableArg|table, y: MoveableArg|table, w: MoveableArg|table, h: MoveableArg|table} The string key of a predefined Moveable cover, otherwise a Moveable setup.
+---@field moveable_t? string|{x: MoveableArg|table, y: MoveableArg|table, w: MoveableArg|table, h: MoveableArg|table}|fun(): Moveable The string key of a predefined Moveable cover, or a Moveable setup table, or a function returning a Moveable object.
 ---@field text? fun(card: table|Card): table A function returning a table of localized texts.
 ---@field colour? number[] Active colour for this drag area.
 ---@field drag_condition? fun(card: table|Card): boolean Used to check if dragging a card shows the drag area or not.
