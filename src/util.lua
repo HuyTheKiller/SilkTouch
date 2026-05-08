@@ -61,7 +61,13 @@ end
 
 function SilkTouch.can_buy(_card)
     local temp_config = {UIBox = {states = {visible = false}}, config = {ref_table = _card}}
-    G.FUNCS.can_buy(temp_config)
+    if _card.ability.set == "Booster" then
+        G.FUNCS.can_open(temp_config)
+    elseif _card.ability.set == "Voucher" then
+        G.FUNCS.can_redeem(temp_config)
+    else
+        G.FUNCS.can_buy(temp_config)
+    end
     return temp_config.config.button ~= nil
 end
 
