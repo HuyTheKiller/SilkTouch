@@ -526,10 +526,10 @@ function create_drag_target_from_card(_card)
         buy_use_loc[#buy_use_loc + 1] = localize('$').._card.cost
         drag_target({ cover = G.DRAG_TARGETS.S_buy_and_use, colour = adjust_alpha(G.C.ORANGE, (G.SETTINGS.drag_area_opacity / 100)),text=buy_use_loc,
           card = _card,
-          active_check = (function(other)
+          active_check = function(other)
             return SilkTouch.can_buy_and_use(other)
-          end),
-          release_func = (function(other)
+          end,
+          release_func = function(other)
             if SilkTouch.can_buy_and_use(other) then
               G.FUNCS.buy_from_shop({config = {
                 ref_table = other,
@@ -537,7 +537,7 @@ function create_drag_target_from_card(_card)
               }})
               return
             end
-          end)
+          end
         })
       end
     end
