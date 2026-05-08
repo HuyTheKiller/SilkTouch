@@ -501,113 +501,112 @@ function create_drag_target_from_card(_card)
       end
     end
 
-    if _card.area and (_card.area == G.shop_jokers or _card.area == G.shop_vouchers or _card.area == G.shop_booster) then
-      local buy_loc = copy_table(localize((_card.ability.set == "Voucher" and 'ml_redeem_target') or (_card.ability.set == "Booster" and 'ml_open_target') or 'ml_buy_target'))
-      buy_loc[#buy_loc + 1] = localize('$').._card.cost
-      drag_target({ cover = G.DRAG_TARGETS.S_buy, colour = adjust_alpha(G.C.GREEN, (G.SETTINGS.drag_area_opacity / 100)), text = buy_loc,
-        card = _card,
-        active_check = function(other)
-          return SilkTouch.can_buy(other)
-        end,
-        release_func = function(other)
-          if other.area == G.shop_jokers and SilkTouch.can_buy(other) then
-            if G.OVERLAY_TUTORIAL and G.OVERLAY_TUTORIAL.button_listen == 'buy_from_shop' then
-              G.FUNCS.tut_next{}
-            end
-            G.FUNCS.buy_from_shop({config = {
-              ref_table = other,
-              id = 'buy'
-            }})
-            return
-          elseif other.area == G.shop_vouchers and SilkTouch.can_buy(other) then
-            G.FUNCS.use_card({config={ref_table = other}})
-          elseif other.area == G.shop_booster and SilkTouch.can_buy(other) then
-            G.FUNCS.use_card({config={ref_table = other}})
-          end
-        end
-      })
-
-      if SilkTouch.can_buy_and_use(_card) then
-        local buy_use_loc = copy_table(localize('ml_buy_and_use_target'))
-        buy_use_loc[#buy_use_loc + 1] = localize('$').._card.cost
-        drag_target({ cover = G.DRAG_TARGETS.S_buy_and_use, colour = adjust_alpha(G.C.ORANGE, (G.SETTINGS.drag_area_opacity / 100)),text=buy_use_loc,
+    if not SMODS then
+      if _card.area and (_card.area == G.shop_jokers or _card.area == G.shop_vouchers or _card.area == G.shop_booster) then
+        local buy_loc = copy_table(localize((_card.ability.set == "Voucher" and 'ml_redeem_target') or (_card.ability.set == "Booster" and 'ml_open_target') or 'ml_buy_target'))
+        buy_loc[#buy_loc + 1] = localize('$').._card.cost
+        drag_target({ cover = G.DRAG_TARGETS.S_buy, colour = adjust_alpha(G.C.GREEN, (G.SETTINGS.drag_area_opacity / 100)), text = buy_loc,
           card = _card,
           active_check = function(other)
-            return SilkTouch.can_buy_and_use(other)
+            return SilkTouch.can_buy(other)
           end,
           release_func = function(other)
-            if SilkTouch.can_buy_and_use(other) then
-              G.FUNCS.buy_from_shop({config = {
-                ref_table = other,
-                id = 'buy_and_use'
-              }})
-              return
-            end
-          end
-        })
-      end
-    end
-
-    if _card.area and (_card.area == G.pack_cards) then
-      if _card.ability.consumeable and _card.ability.set ~= 'Planet'
-      and (not SMODS or not (booster_obj and SMODS.card_select_area(_card, booster_obj) and _card:selectable_from_pack(booster_obj))) then
-        drag_target({ cover = G.DRAG_TARGETS.C_use, colour = adjust_alpha(G.C.RED, (G.SETTINGS.drag_area_opacity / 100)),text = {localize('b_use')},
-          card = _card,
-          active_check = function(other)
-            return other:can_use_consumeable()
-          end,
-          release_func = function(other)
-            if other:can_use_consumeable() then
-              G.FUNCS.use_card({config={ref_table = other}})
-            end
-          end
-        })
-      else
-        local select_text = localize('b_select')
-        if SMODS and booster_obj then
-          select_text = SMODS.get_select_text(_card, booster_obj) or localize('b_select')
-        end
-        drag_target({ cover = G.DRAG_TARGETS.P_select, colour = adjust_alpha(G.C.GREEN, (G.SETTINGS.drag_area_opacity / 100)), text = {select_text},
-          card = _card,
-          active_check = function(other)
-            return SilkTouch.can_select(other)
-          end,
-          release_func = function(other)
-            if SilkTouch.can_select(other) then
-              G.FUNCS.use_card({config={ref_table = other}})
-            end
-          end
-        })
-      end
-    end
-
-    if _card.area and (_card.area == G.jokers or _card.area == G.consumeables) then
-      local sell_loc = copy_table(localize('ml_sell_target'))
-      sell_loc[#sell_loc + 1] = localize('$').._card.sell_cost_label
-      drag_target({ cover = _card.area == G.consumeables and G.DRAG_TARGETS.C_sell or G.DRAG_TARGETS.J_sell, colour = adjust_alpha(G.C.GOLD, (G.SETTINGS.drag_area_opacity / 100)),text = sell_loc,
-        card = _card,
-        active_check = function(other)
-          return other:can_sell_card()
-        end,
-        release_func = function(other)
-          G.FUNCS.sell_card{config={ref_table=other}}
-        end
-      })
-      if _card.ability.consumeable then
-        drag_target({ cover = G.DRAG_TARGETS.C_use, colour = adjust_alpha(G.C.RED, (G.SETTINGS.drag_area_opacity / 100)),text = {localize('b_use')},
-          card = _card,
-          active_check = function(other)
-            return other:can_use_consumeable()
-          end,
-          release_func = function(other)
-            if other:can_use_consumeable() then
-              G.FUNCS.use_card({config={ref_table = other}})
-              if G.OVERLAY_TUTORIAL and G.OVERLAY_TUTORIAL.button_listen == 'use_card' then
+            if other.area == G.shop_jokers and SilkTouch.can_buy(other) then
+              if G.OVERLAY_TUTORIAL and G.OVERLAY_TUTORIAL.button_listen == 'buy_from_shop' then
                 G.FUNCS.tut_next{}
               end
+              G.FUNCS.buy_from_shop({config = {
+                ref_table = other,
+                id = 'buy'
+              }})
+              return
+            elseif other.area == G.shop_vouchers and SilkTouch.can_buy(other) then
+              G.FUNCS.use_card({config={ref_table = other}})
+            elseif other.area == G.shop_booster and SilkTouch.can_buy(other) then
+              G.FUNCS.use_card({config={ref_table = other}})
             end
           end
         })
+        if SilkTouch.can_buy_and_use(_card) then
+          local buy_use_loc = copy_table(localize('ml_buy_and_use_target'))
+          buy_use_loc[#buy_use_loc + 1] = localize('$').._card.cost
+          drag_target({ cover = G.DRAG_TARGETS.S_buy_and_use, colour = adjust_alpha(G.C.ORANGE, (G.SETTINGS.drag_area_opacity / 100)),text=buy_use_loc,
+            card = _card,
+            active_check = function(other)
+              return SilkTouch.can_buy_and_use(other)
+            end,
+            release_func = function(other)
+              if SilkTouch.can_buy_and_use(other) then
+                G.FUNCS.buy_from_shop({config = {
+                  ref_table = other,
+                  id = 'buy_and_use'
+                }})
+                return
+              end
+            end
+          })
+        end
+      end
+      if _card.area and (_card.area == G.pack_cards) then
+        if _card.ability.consumeable and _card.ability.set ~= 'Planet'
+        and (not SMODS or not (booster_obj and SMODS.card_select_area(_card, booster_obj) and _card:selectable_from_pack(booster_obj))) then
+          drag_target({ cover = G.DRAG_TARGETS.C_use, colour = adjust_alpha(G.C.RED, (G.SETTINGS.drag_area_opacity / 100)),text = {localize('b_use')},
+            card = _card,
+            active_check = function(other)
+              return other:can_use_consumeable()
+            end,
+            release_func = function(other)
+              if other:can_use_consumeable() then
+                G.FUNCS.use_card({config={ref_table = other}})
+              end
+            end
+          })
+        else
+          local select_text = localize('b_select')
+          if SMODS and booster_obj then
+            select_text = SMODS.get_select_text(_card, booster_obj) or localize('b_select')
+          end
+          drag_target({ cover = G.DRAG_TARGETS.P_select, colour = adjust_alpha(G.C.GREEN, (G.SETTINGS.drag_area_opacity / 100)), text = {select_text},
+            card = _card,
+            active_check = function(other)
+              return SilkTouch.can_select(other)
+            end,
+            release_func = function(other)
+              if SilkTouch.can_select(other) then
+                G.FUNCS.use_card({config={ref_table = other}})
+              end
+            end
+          })
+        end
+      end
+      if _card.area and (_card.area == G.jokers or _card.area == G.consumeables) then
+        local sell_loc = copy_table(localize('ml_sell_target'))
+        sell_loc[#sell_loc + 1] = localize('$').._card.sell_cost_label
+        drag_target({ cover = _card.area == G.consumeables and G.DRAG_TARGETS.C_sell or G.DRAG_TARGETS.J_sell, colour = adjust_alpha(G.C.GOLD, (G.SETTINGS.drag_area_opacity / 100)),text = sell_loc,
+          card = _card,
+          active_check = function(other)
+            return other:can_sell_card()
+          end,
+          release_func = function(other)
+            G.FUNCS.sell_card{config={ref_table=other}}
+          end
+        })
+        if _card.ability.consumeable then
+          drag_target({ cover = G.DRAG_TARGETS.C_use, colour = adjust_alpha(G.C.RED, (G.SETTINGS.drag_area_opacity / 100)),text = {localize('b_use')},
+            card = _card,
+            active_check = function(other)
+              return other:can_use_consumeable()
+            end,
+            release_func = function(other)
+              if other:can_use_consumeable() then
+                G.FUNCS.use_card({config={ref_table = other}})
+                if G.OVERLAY_TUTORIAL and G.OVERLAY_TUTORIAL.button_listen == 'use_card' then
+                  G.FUNCS.tut_next{}
+                end
+              end
+            end
+          })
+        end
       end
     end
 
