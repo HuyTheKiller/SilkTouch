@@ -469,7 +469,7 @@ function create_drag_target_from_card(_card)
         C_sell =        Moveable{T={x = G.jokers.T.x, y = G.jokers.T.y - 0.2, w = G.jokers.T.w, h = G.jokers.T.h+0.6}},
         J_sell =        Moveable{T={x = G.consumeables.T.x+0.3, y = G.consumeables.T.y - 0.2, w = G.consumeables.T.w-0.3, h = G.consumeables.T.h+0.6}},
         C_use =         Moveable{T={x = G.deck.T.x + 0.2, y = G.deck.T.y - 5.1, w = G.deck.T.w-0.1, h =4.5}},
-        P_select =      Moveable{T={x = G.play.T.x, y = G.play.T.y - 2, w = G.play.T.w + 2, h = G.play.T.h + 1}},
+        P_select =      Moveable{T={x = G.play.T.x - 0.7, y = G.play.T.y - 2, w = G.play.T.w + 1.4, h = G.play.T.h + 1}},
       }
       for k, v in pairs(SilkTouch.DragTargets or {}) do
         if type(v.moveable_t) == "table" then

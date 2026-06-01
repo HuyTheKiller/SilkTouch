@@ -166,9 +166,9 @@ SilkTouch.DragTarget{
     moveable_t = function()
         return Moveable{
             T = {
-                x = G.play.T.x,
+                x = G.play.T.x - 0.7,
                 y = G.play.T.y - 2,
-                w = G.play.T.w + 2,
+                w = G.play.T.w + 1.4,
                 h = G.play.T.h + 1,
             }
         }
