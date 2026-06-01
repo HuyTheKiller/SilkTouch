@@ -18,6 +18,7 @@ SilkTouch.ControllerButton = SMODS.GameObject:extend{
     press_func = function(card) G.DEBUG_VALUE = 'WORKIN' end,
     inject = function(self)
         assert(self.key ~= "silktouch_order", "Key \"silktouch_order\" is already taken for internal processing. Please use a different key.")
+        assert(self.key == "use" or not self.SMODS_use_card, "Internal field for new select_card, DO NOT USE ELSEWHERE")
         if self.active_check_cb or self.press_func_cb then
             assert(self.active_check_cb and self.press_func_cb, "\"active_check_cb\" and \"press_func_cb\" must be defined together.")
         else
