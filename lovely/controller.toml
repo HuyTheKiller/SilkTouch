@@ -259,6 +259,9 @@ else
 end
 --BOTH
 ----------------------------------
+if not self.pending_double_click and G.SETTINGS.dclick_to_rclick then
+    self.pending_double_click = 0
+end
 
 --Was the Cursor release in the same location as the Cursor press and within Cursor timeout?
 self.cursor_up.handled = true
@@ -589,6 +592,13 @@ if self.is_cursor_down then
     end
 end
 if not self.is_cursor_down then
+    if self.pending_double_click then
+        if self.pending_double_click > G.SETTINGS.max_dclick_interval then
+            self.pending_double_click = nil
+        else
+            self.pending_double_click = self.pending_double_click + dt
+        end
+    end
     if self.cursor_down.target then
         self.cursor_down.target = nil
         self.cursor_down.distance = nil
