@@ -60,7 +60,7 @@ if G.SETTINGS.drag_option == nil then
     G.SETTINGS.drag_option = 1
 end
 G.SETTINGS.drag_area_opacity = G.SETTINGS.drag_area_opacity or 90
-G.SETTINGS.max_dclick_interval = G.SETTINGS.max_dclick_interval or 0.3
+G.SETTINGS.max_dclick_interval = G.SETTINGS.max_dclick_interval or 0.2
 
 function SilkTouch.config_tab()
     local dragging_label = localize("ph_enable_dragging") ~= "ERROR"
