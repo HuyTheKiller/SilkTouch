@@ -7,15 +7,21 @@ version = "1.0.0"
 [patches.pattern]
 target = "engine/controller.lua"
 pattern = '''
-self.collision_list = {} --A list of all node that the cursor currently collides with
+self.cursor_position = {x=0,y=0} --NOT IN GAME UNITS
 '''
 position = "after"
 payload = '''
+
 --Touch controller
 self.touch_control = {s_tap = {target = nil,handled = true}, l_press = {target = nil, handled = true}}
 
 --Swipe-to-select control
 self.dragSelectActive = {active = false, mode = nil}
+
+--Additions
+self.cursor_down.uptime = 0
+self.cursor_up.uptime = 0.1
+self.cursor_hover.uptime = 0
 '''
 match_indent = true
 
