@@ -907,42 +907,6 @@ end
 '''
 match_indent = true
 
-# [[patches]]
-# [patches.pattern]
-# target = "engine/controller.lua"
-# pattern = '''
-# if v.states.hover.can and (not v.states.drag.is or self.HID.touch) then
-# '''
-# position = "at"
-# payload = '''
-# if v.states.hover.can and (not v.states.drag.is) then
-# '''
-# match_indent = true
-
-# [[patches]]
-# [patches.pattern]
-# target = "engine/controller.lua"
-# pattern = '''
-# if not self.cursor_hover.target or (self.dragging.target and not self.HID.touch) then self.cursor_hover.target = G.ROOM end
-# '''
-# position = "at"
-# payload = '''
-# if not self.cursor_hover.target or self.dragging.target then self.cursor_hover.target = G.ROOM end
-# '''
-# match_indent = true
-
-# [[patches]]
-# [patches.pattern]
-# target = "engine/controller.lua"
-# pattern = '''
-# local press_node =  (self.HID.touch and self.cursor_hover.target) or self.hovering.target or self.focused.target
-# '''
-# position = "at"
-# payload = '''
-# local press_node = (self.cursor_hover.target) or self.hovering.target or self.focused.target
-# '''
-# match_indent = true
-
 [[patches]]
 [patches.pattern]
 target = "engine/controller.lua"
