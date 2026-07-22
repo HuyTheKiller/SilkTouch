@@ -62,7 +62,7 @@ G.FUNCS.cycle_update = function(args)
 end
 
 if G.SETTINGS.vibration == nil then
-    G.SETTINGS.vibration = SilkTouch.OS == 'Android' or SilkTouch.OS == 'iOS'
+    G.SETTINGS.vibration = SilkTouch.OS == 'Android'
 end
 if G.SETTINGS.enable_action_buttons == nil then
     G.SETTINGS.enable_action_buttons = not (SilkTouch.OS == 'Android' or SilkTouch.OS == 'iOS')
