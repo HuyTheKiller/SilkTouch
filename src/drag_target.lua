@@ -169,14 +169,21 @@ SilkTouch.DragTarget{
     key = "P_select",
     prefix_config = {key = false},
     moveable_t = function()
-        return Moveable{
+        local T = {
+            x = G.play.T.x - 0.7,
+            y = G.play.T.y - 2,
+            w = G.play.T.w + 1.4,
+            h = G.play.T.h + 1,
+        }
+        if (SilkTouch.OS == 'Android' or SilkTouch.OS == 'iOS') and G.widescreen then
             T = {
-                x = G.play.T.x - 0.7,
+                x = G.play.T.x,
                 y = G.play.T.y - 2,
-                w = G.play.T.w + 1.4,
+                w = G.play.T.w + 2,
                 h = G.play.T.h + 1,
             }
-        }
+        end
+        return Moveable{T = T}
     end,
     text = function(card)
         local select_text = booster_obj and SMODS.get_select_text(card, booster_obj) or localize('b_select')
