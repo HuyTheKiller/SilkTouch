@@ -16,6 +16,7 @@ return {
     },
     misc = {
         dictionary = {
+            b_vibration = "Rung Thiết Bị",
             ph_enable_dragging = "Bật Kéo Thả",
             ph_enable_action_button = "Bật Nút Thao Tác",
             ph_drag_to_select_deselect = "Bật kéo thả để chọn/bỏ chọn khu vực trên tay",

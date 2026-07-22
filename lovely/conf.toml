@@ -1,0 +1,18 @@
+[manifest]
+dump_lua = true
+priority = 0
+version = "1.0.0"
+
+[[patches]]
+[patches.pattern]
+target = "conf.lua"
+pattern = '''
+function love.conf(t)
+'''
+position = "after"
+payload = '''
+    if SilkTouch.OS == 'Android' or SilkTouch.OS == 'iOS' then
+        t.window.orientation = "landscape"
+    end
+'''
+match_indent = true

@@ -37,6 +37,23 @@ function love.mousepressed(x, y, button, touch)
     return mousepressed_ref(x, y, button, touch)
 end
 
+local upd_canvas_juice_ref = update_canvas_juice
+function update_canvas_juice(dt)
+    upd_canvas_juice_ref(dt)
+    -- Recreate vibration from native mobile
+    if (SilkTouch.OS == 'Android' or SilkTouch.OS == 'iOS') and G.SETTINGS.vibration then
+        love.system.vibrate((G.CURR_VIBRATION or 0)*0.4)
+    end
+end
+
+local prep_stage_ref = Game.prep_stage
+function Game:prep_stage(new_stage, new_state, new_game_obj)
+    prep_stage_ref(self, new_stage, new_state, new_game_obj)
+    self.widescreen = false
+    local w, h = love.window.getMode()
+    if w/h >= 2 then self.widescreen = true end
+end
+
 G.FUNCS.cycle_update = function(args)
     args = args or {}
     if args.cycle_config and args.cycle_config.ref_table and args.cycle_config.ref_value then
@@ -44,6 +61,9 @@ G.FUNCS.cycle_update = function(args)
     end
 end
 
+if G.SETTINGS.vibration == nil then
+    G.SETTINGS.vibration = SilkTouch.OS == 'Android' or SilkTouch.OS == 'iOS'
+end
 if G.SETTINGS.enable_action_buttons == nil then
     G.SETTINGS.enable_action_buttons = not (SilkTouch.OS == 'Android' or SilkTouch.OS == 'iOS')
 end

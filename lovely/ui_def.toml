@@ -26,3 +26,31 @@ payload = '''
 -- Function overridden by SilkTouch in src/util.lua
 '''
 match_indent = true
+
+[[patches]]
+[patches.regex]
+target = "functions/UI_definitions.lua"
+pattern = '''0\.6\*args\.scale'''
+position = "at"
+payload = '''0.6*args.scale*((SilkTouch.OS == 'Android' or SilkTouch.OS == 'iOS') and 2 or 1)'''
+
+[[patches]]
+[patches.regex]
+target = "functions/UI_definitions.lua"
+pattern = '''minh = 0\.6, minw = 2\.7,'''
+position = "at"
+payload = '''minh = 0.6*((SilkTouch.OS == 'Android' or SilkTouch.OS == 'iOS') and 2 or 1), minw = 2.7,'''
+
+[[patches]]
+[patches.pattern]
+target = "functions/UI_definitions.lua"
+pattern = '''
+G.F_RUMBLE and create_toggle({label = localize('b_set_rumble'), ref_table = G.SETTINGS, ref_value = 'rumble'}) or nil,
+'''
+position = "at"
+payload = '''
+G.F_RUMBLE and create_toggle({label = localize('b_set_rumble'), ref_table = G.SETTINGS, ref_value = 'rumble'})
+or (SilkTouch.OS == 'Android' or SilkTouch.OS == 'iOS')
+and create_toggle({label = localize('b_vibration'), ref_table = G.SETTINGS, ref_value = 'vibration'}) or nil,
+'''
+match_indent = true
