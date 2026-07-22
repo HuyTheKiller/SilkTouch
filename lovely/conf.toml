@@ -11,7 +11,7 @@ function love.conf(t)
 '''
 position = "after"
 payload = '''
-    if SilkTouch.OS == 'Android' or SilkTouch.OS == 'iOS' then
+    if love.system.getOS() == 'Android' or love.system.getOS() == 'iOS' then
         t.window.orientation = "landscape"
     end
 '''
