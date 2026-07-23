@@ -8,10 +8,25 @@ version = "1.0.0"
 target = "functions/common_events.lua"
 pattern = '''
 G.hand.T.x = G.TILE_W - G.hand.T.w - 2.85
+G.hand.T.y = G.TILE_H - G.hand.T.h
 '''
 position = "at"
 payload = '''
 G.hand.T.x = G.TILE_W - G.hand.T.w - 2.85 + ((SilkTouch.OS == 'Android' or SilkTouch.OS == 'iOS') and G.widescreen and -0.6 or 0)
+G.hand.T.y = G.TILE_H - G.hand.T.h
+G.hand.T.w = G.hand.T.w + ((SilkTouch.OS == 'Android' or SilkTouch.OS == 'iOS') and G.widescreen and 0.7 or 0)
+'''
+match_indent = true
+
+[[patches]]
+[patches.pattern]
+target = "functions/common_events.lua"
+pattern = '''
+G.play.T.y = G.hand.T.y - 3.6
+'''
+position = "after"
+payload = '''
+G.play.T.w = G.play.T.w + ((SilkTouch.OS == 'Android' or SilkTouch.OS == 'iOS') and G.widescreen and 0.7 or 0)
 '''
 match_indent = true
 
