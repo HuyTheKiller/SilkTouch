@@ -32,23 +32,14 @@ match_indent = true
 [patches.pattern]
 target = "functions/common_events.lua"
 pattern = '''
+G.consumeables.T.x = G.jokers.T.x + G.jokers.T.w + 0.2
 G.consumeables.T.y = 0
 '''
 position = "at"
 payload = '''
+G.consumeables.T.x = G.jokers.T.x + G.jokers.T.w + 0.2 + ((SilkTouch.OS == 'Android' or SilkTouch.OS == 'iOS') and G.widescreen and 0.8 or 0)
 G.consumeables.T.y = 0 + ((SilkTouch.OS == 'Android' or SilkTouch.OS == 'iOS') and G.widescreen and -0.2 or 0)
-'''
-match_indent = true
-
-[[patches]]
-[patches.pattern]
-target = "functions/common_events.lua"
-pattern = '''
-G.consumeables.T.x = G.jokers.T.x + G.jokers.T.w + 0.2
-'''
-position = "at"
-payload = '''
-G.consumeables.T.x = G.jokers.T.x + G.jokers.T.w + 0.2 + ((SilkTouch.OS == 'Android' or SilkTouch.OS == 'iOS') and G.widescreen and 0.6 or 0)
+G.consumeables.T.w = G.consumeables.T.w + ((SilkTouch.OS == 'Android' or SilkTouch.OS == 'iOS') and G.widescreen and 0.2 or 0)
 '''
 match_indent = true
 
@@ -60,6 +51,6 @@ G.deck.T.x = G.TILE_W - G.deck.T.w - 0.5
 '''
 position = "at"
 payload = '''
-G.deck.T.x = G.TILE_W - G.deck.T.w - 0.5 + ((SilkTouch.OS == 'Android' or SilkTouch.OS == 'iOS') and G.widescreen and 0.6 or 0)
+G.deck.T.x = G.TILE_W - G.deck.T.w - 0.5 + ((SilkTouch.OS == 'Android' or SilkTouch.OS == 'iOS') and G.widescreen and 0.8 or 0)
 '''
 match_indent = true

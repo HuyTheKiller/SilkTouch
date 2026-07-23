@@ -11,6 +11,6 @@ config = {align=('cli'), offset = {x=-0.7,y=0},major = G.ROOM_ATTACH}
 '''
 position = "at"
 payload = '''
-config = {align=('cli'), offset = {x=-0.7+((SilkTouch.OS == 'Android' or SilkTouch.OS == 'iOS') and G.widescreen and -1 or 0),y=0},major = G.ROOM_ATTACH}
+config = {align=('cli'), offset = {x=-0.7+((SilkTouch.OS == 'Android' or SilkTouch.OS == 'iOS') and G.widescreen and -0.9 or 0),y=0},major = G.ROOM_ATTACH}
 '''
 match_indent = true
