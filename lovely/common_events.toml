@@ -32,6 +32,18 @@ match_indent = true
 [patches.pattern]
 target = "functions/common_events.lua"
 pattern = '''
+G.consumeables.T.y = 0
+'''
+position = "at"
+payload = '''
+G.consumeables.T.y = 0 + ((SilkTouch.OS == 'Android' or SilkTouch.OS == 'iOS') and G.widescreen and -0.2 or 0)
+'''
+match_indent = true
+
+[[patches]]
+[patches.pattern]
+target = "functions/common_events.lua"
+pattern = '''
 G.consumeables.T.x = G.jokers.T.x + G.jokers.T.w + 0.2
 '''
 position = "at"
