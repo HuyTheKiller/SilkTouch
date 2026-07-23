@@ -11,7 +11,7 @@ G.hand.T.x = G.TILE_W - G.hand.T.w - 2.85
 '''
 position = "at"
 payload = '''
-G.hand.T.x = G.TILE_W - G.hand.T.w - 2.85 + ((SilkTouch.OS == 'Android' or SilkTouch.OS == 'iOS') and G.widescreen and -0.2 or 0)
+G.hand.T.x = G.TILE_W - G.hand.T.w - 2.85 + ((SilkTouch.OS == 'Android' or SilkTouch.OS == 'iOS') and G.widescreen and -0.6 or 0)
 '''
 match_indent = true
 
