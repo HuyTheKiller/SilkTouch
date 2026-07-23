@@ -46,7 +46,7 @@ payload = '''minh = 0.6*((SilkTouch.OS == 'Android' or SilkTouch.OS == 'iOS') an
 target = "functions/UI_definitions.lua"
 pattern = '''minh = 0\.7, minw = 0\.9,'''
 position = "at"
-payload = '''minh = 0.7, minw = 0.9*((SilkTouch.OS == 'Android' or SilkTouch.OS == 'iOS') and 2 or 1),'''
+payload = '''minh = 0.7, minw = 0.9*((SilkTouch.OS == 'Android' or SilkTouch.OS == 'iOS') and 1.5 or 1),'''
 
 [[patches]]
 [patches.pattern]
