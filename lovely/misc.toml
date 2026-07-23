@@ -14,3 +14,17 @@ payload = '''
 if G.F_MOBILE_UI and not args.ignore_mobile_ui then desc_scale = desc_scale*1.5 end
 '''
 match_indent = true
+
+[[patches]]
+[patches.pattern]
+target = "globals.lua"
+pattern = '''
+--check_version
+'''
+position = "before"
+payload = '''
+if love.system.getOS() == 'Android' or love.system.getOS() == 'iOS' then
+    VERSION = VERSION..' (STM)'
+end
+'''
+match_indent = true
