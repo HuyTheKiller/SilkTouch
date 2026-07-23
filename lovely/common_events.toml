@@ -26,7 +26,7 @@ G.play.T.y = G.hand.T.y - 3.6
 '''
 position = "after"
 payload = '''
-G.play.T.w = G.play.T.w + ((SilkTouch.OS == 'Android' or SilkTouch.OS == 'iOS') and G.widescreen and 0.7 or 0)
+G.play.T.w = G.play.T.w + ((SilkTouch.OS == 'Android' or SilkTouch.OS == 'iOS') and G.widescreen and 0.35 or 0)
 '''
 match_indent = true
 
