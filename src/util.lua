@@ -74,7 +74,7 @@ if G.SETTINGS.enable_drag_select == nil then
     G.SETTINGS.enable_drag_select = SilkTouch.OS == 'Android' or SilkTouch.OS == 'iOS' or not Handy
 end
 if G.SETTINGS.dclick_to_rclick == nil then
-    G.SETTINGS.dclick_to_rclick = SilkTouch.OS == 'Android' or SilkTouch.OS == 'iOS'
+    G.SETTINGS.dclick_to_rclick = false
 end
 if G.SETTINGS.drag_option == nil then
     G.SETTINGS.drag_option = 1
