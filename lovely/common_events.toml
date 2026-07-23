@@ -21,8 +21,9 @@ target = "functions/common_events.lua"
 pattern = '''
 G.jokers.T.y = 0
 '''
-position = "after"
+position = "at"
 payload = '''
+G.jokers.T.y = 0 + ((SilkTouch.OS == 'Android' or SilkTouch.OS == 'iOS') and G.widescreen and -0.2 or 0)
 G.jokers.T.w = G.jokers.T.w + ((SilkTouch.OS == 'Android' or SilkTouch.OS == 'iOS') and G.widescreen and 0.4 or 0)
 '''
 match_indent = true
