@@ -58,9 +58,9 @@ payload = '''ignore_mobile_ui = true, scale = target.scale'''
 [[patches]]
 [patches.regex]
 target = "functions/UI_definitions.lua"
-pattern = '''localize\(blind_state, 'blind_states'\), scale = 0\.45'''
+pattern = '''ref_value = type, scale = 0\.45'''
 position = "at"
-payload = '''localize(blind_state, 'blind_states'), scale = 0.45*((SilkTouch.OS == 'Android' or SilkTouch.OS == 'iOS') and 1.5 or 1)'''
+payload = '''ref_value = type, scale = 0.45*((SilkTouch.OS == 'Android' or SilkTouch.OS == 'iOS') and 1.5 or 1)'''
 
 [[patches]]
 [patches.pattern]
