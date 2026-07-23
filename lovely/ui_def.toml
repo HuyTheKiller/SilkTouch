@@ -67,7 +67,7 @@ payload = '''ref_value = type, scale = 0.45*((SilkTouch.OS == 'Android' or SilkT
 target = "functions/UI_definitions.lua"
 pattern = '''id = args\.back_id or 'overlay_menu_back_button', align = "cm", minw = 2\.5,'''
 position = "at"
-payload = '''id = args.back_id or 'overlay_menu_back_button', align = "cm", minw = 2.5, minh = 0.6*((SilkTouch.OS == 'Android' or SilkTouch.OS == 'iOS') and 1.5 or 1)'''
+payload = '''id = args.back_id or 'overlay_menu_back_button', align = "cm", minw = 2.5, minh = 0.6*((SilkTouch.OS == 'Android' or SilkTouch.OS == 'iOS') and 1.5 or 1),'''
 
 [[patches]]
 [patches.pattern]
