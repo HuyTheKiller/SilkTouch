@@ -39,7 +39,7 @@ payload = '''0.6*args.scale*((SilkTouch.OS == 'Android' or SilkTouch.OS == 'iOS'
 target = "functions/UI_definitions.lua"
 pattern = '''minh = 0\.6, minw = 2\.7,'''
 position = "at"
-payload = '''minh = 0.6*((SilkTouch.OS == 'Android' or SilkTouch.OS == 'iOS') and 2 or 1), minw = 2.7,'''
+payload = '''minh = 0.6*((SilkTouch.OS == 'Android' or SilkTouch.OS == 'iOS') and not run_info and 2 or 1), minw = 2.7,'''
 
 [[patches]]
 [patches.regex]
@@ -47,6 +47,13 @@ target = "functions/UI_definitions.lua"
 pattern = '''minh = 0\.7, minw = 0\.9,'''
 position = "at"
 payload = '''minh = 0.7, minw = 0.9*((SilkTouch.OS == 'Android' or SilkTouch.OS == 'iOS') and 1.5 or 1),'''
+
+[[patches]]
+[patches.regex]
+target = "functions/UI_definitions.lua"
+pattern = '''scale = target\.scale'''
+position = "at"
+payload = '''ignore_mobile_ui = true, scale = target.scale'''
 
 [[patches]]
 [patches.pattern]
