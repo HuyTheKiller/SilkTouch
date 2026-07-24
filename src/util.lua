@@ -81,6 +81,7 @@ if G.SETTINGS.drag_option == nil then
 end
 G.SETTINGS.drag_area_opacity = G.SETTINGS.drag_area_opacity or 90
 G.SETTINGS.max_dclick_interval = G.SETTINGS.max_dclick_interval or 0.2
+G.SETTINGS.max_dclick_distance = G.SETTINGS.max_dclick_distance or 1
 
 function SilkTouch.config_tab()
     local dragging_label = localize("ph_enable_dragging") ~= "ERROR"
@@ -99,6 +100,8 @@ function SilkTouch.config_tab()
     and localize("ph_dclick_to_rclick") or "Double-click/tap to Right-click"
     local max_dclick_int_label = localize("ph_max_dclick_int") ~= "ERROR"
     and localize("ph_max_dclick_int") or "Maximum Double-click/tap Interval"
+    local max_dclick_dist_label = localize("ph_max_dclick_dist") ~= "ERROR"
+    and localize("ph_max_dclick_dist") or "Maximum Double-click/tap Distance"
     return {n=G.UIT.ROOT, config={align = "cm", padding = 0.05, colour = G.C.CLEAR}, nodes={
         create_toggle({label = dragging_label, ref_table = G.SETTINGS, ref_value = 'enable_dragging',
         callback = function()
@@ -112,6 +115,7 @@ function SilkTouch.config_tab()
         create_slider({label = drag_area_op_label, w = 5, h = 0.4, ref_table = G.SETTINGS, ref_value = 'drag_area_opacity', min = 0, max = 100}),
         create_toggle({label = dclick_to_rclick_label, ref_table = G.SETTINGS, ref_value = 'dclick_to_rclick'}),
         create_slider({label = max_dclick_int_label, w = 5, h = 0.4, ref_table = G.SETTINGS, ref_value = 'max_dclick_interval', min = 0, max = 1, decimal_places = 2}),
+        create_slider({label = max_dclick_dist_label, w = 5, h = 0.4, ref_table = G.SETTINGS, ref_value = 'max_dclick_distance', min = 0, max = 2, decimal_places = 1}),
     }}
 end
 

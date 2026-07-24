@@ -29,6 +29,7 @@ return {
             ph_drag_area_op = "Độ Mờ Khu Vực Kéo Thả",
             ph_dclick_to_rclick = "Nhấn đúp để Nhấn chuột phải",
             ph_max_dclick_int = "Khoảng Giữa Nhấn Đúp Tối Đa",
+            ph_max_dclick_dist = "Khoảng Cách Nhấn Đúp Tối Đa",
         },
     },
 }

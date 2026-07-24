@@ -29,6 +29,7 @@ return {
             ph_drag_area_op = "Drag Area Opacity",
             ph_dclick_to_rclick = "Double-click/tap to Right-click",
             ph_max_dclick_int = "Maximum Double-click/tap Interval",
+            ph_max_dclick_dist = "Maximum Double-click/tap Distance",
         },
     },
 }
