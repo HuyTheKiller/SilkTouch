@@ -173,15 +173,15 @@ This version is packed with a brand new API: `SilkTouch.ControllerButton`, allow
             -- Example 2: multiple lines of text
             text = function(card)
                 return {
-                    localize('b_buy'),     -- The first line
-                    localize('b_and_use'), -- The second line
+                    localize('b_buy'),     -- First line
+                    localize('b_and_use'), -- Second line
                 }
             end,
             -- Example 3: multiple text combinations on single lines
             text = function(card)
                 return {
-                    localize('b_sell'), -- The first line
-                    {                   -- The second line
+                    localize('b_sell'), -- First line
+                    {                   -- Second line
                         localize('$'),  -- First piece of text on second line
                         -- Second piece of text on second line
                         -- any string text mentioned above can be replaced with ref_table and ref_value
@@ -198,7 +198,7 @@ This version is packed with a brand new API: `SilkTouch.ControllerButton`, allow
             -- This is used for Example 3 above
             text_scale = function()
                 return {
-                    0.4, -- First line
+                    0.4,         -- First line
                     {0.4, 0.55}, -- Second line, used for each piece of text separately
                 }
             end
