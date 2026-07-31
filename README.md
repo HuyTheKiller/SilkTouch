@@ -81,6 +81,21 @@ This version is packed with a brand new API: `SilkTouch.ControllerButton`, allow
             end
         }
         ```
+    - `font`: A function returning a table of font keys for the above table
+        - Expects a function like this:
+        ```lua
+        {
+            -- Example font usage for the following table (used for each line)
+            -- {"This is a piece of text", "distributed evenly into", "three different lines"}
+            font = function(card)
+                return {
+                    "modprefix_myfont", -- First line
+                    1,                  -- Second line (use index numbers to access vanilla fonts instead of SMODS.Fonts)
+                    "default"           -- Third line (non-existent keys default to language font)
+                }
+            end
+        }
+        ```
     - `colour = G.C.UI.TRANSPARENT_DARK` - The active colour for the drag area,
     - `drag_condition`: A function to check if dragging a card shows the drag area or not
         - Expects a function like this:
@@ -200,6 +215,21 @@ This version is packed with a brand new API: `SilkTouch.ControllerButton`, allow
                 return {
                     0.4,         -- First line
                     {0.4, 0.55}, -- Second line, used for each piece of text separately
+                }
+            end
+        }
+        ```
+    - `font`: A function returning a table of font keys for the above table
+        - Expects a function like this:
+        ```lua
+        {
+            -- This is used for Example 3 above
+            font = function(card)
+                return {
+                    "modprefix_myfont", -- First line
+                    {1, "default"}      -- Second line, used for each piece of text separately
+                    -- (use index numbers to access vanilla fonts instead of SMODS.Fonts)
+                    -- (Non-existent keys default to language font)
                 }
             end
         }
