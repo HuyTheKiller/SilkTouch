@@ -354,12 +354,13 @@ function G.UIDEF.card_focus_button(args)
         button_contents = {n=G.UIT.C, config={align = side == "left" and "cl" or "cr"}, nodes={}}
         local text_table = v.text and v.text(args.card) or {}
         local text_scale_table = v.text_scale and v.text_scale()
+        local font_table = v.font and v.font(args.card)
         if text_table.single_text then
           if type(text_table[1]) == "table" and text_table[1].ref_table and text_table[1].ref_value then
             button_contents = {n=G.UIT.T, config={ref_table = text_table[1].ref_table, ref_value = text_table[1].ref_value,
-            colour = G.C.WHITE, scale = text_scale_table[1]}}
+            colour = G.C.WHITE, scale = text_scale_table[1], font = font_table and (SMODS.Fonts[font_table[1]] or G.FONTS[font_table[1]])}}
           else
-            button_contents = {n=G.UIT.T, config={text = text_table[1], colour = G.C.WHITE, scale = text_scale_table[1]}}
+            button_contents = {n=G.UIT.T, config={text = text_table[1], colour = G.C.WHITE, scale = text_scale_table[1], font = font_table and (SMODS.Fonts[font_table[1]] or G.FONTS[font_table[1]])}}
           end
         else
           for i, text in ipairs(text_table) do
@@ -370,19 +371,19 @@ function G.UIDEF.card_focus_button(args)
                 local inner_node
                 if type(inner_text) == "table" and inner_text.ref_table and inner_text.ref_value then
                   inner_node = {n=G.UIT.T, config={ref_table = inner_text.ref_table, ref_value = inner_text.ref_value,
-                  colour = G.C.WHITE, scale = text_scale_table[i][j] or 0.4, shadow = true}}
+                  colour = G.C.WHITE, scale = text_scale_table[i][j] or 0.4, shadow = true, font = font_table and (SMODS.Fonts[font_table[i][j]] or G.FONTS[font_table[i][j]])}}
                 else
                   inner_node = {n=G.UIT.T, config={text = inner_text, colour = G.C.WHITE,
-                  scale = text_scale_table[i][j] or 0.4, shadow = true}}
+                  scale = text_scale_table[i][j] or 0.4, shadow = true, font = font_table and (SMODS.Fonts[font_table[i][j]] or G.FONTS[font_table[i][j]])}}
                 end
                 table.insert(node.nodes, inner_node)
               end
             elseif type(text) == "table" and text.ref_table and text.ref_value then
               local inner_node = {n=G.UIT.T, config={ref_table = text.ref_table, ref_value = text.ref_value,
-              colour = G.C.WHITE, scale = text_scale_table[i] or 0.4, shadow = true}}
+              colour = G.C.WHITE, scale = text_scale_table[i] or 0.4, shadow = true, font = font_table and (SMODS.Fonts[font_table[i]] or G.FONTS[font_table[i]])}}
               table.insert(node.nodes, inner_node)
             else
-              local inner_node = {n=G.UIT.T, config={text = text, colour = G.C.WHITE, scale = text_scale_table[i] or 0.4, shadow = true}}
+              local inner_node = {n=G.UIT.T, config={text = text, colour = G.C.WHITE, scale = text_scale_table[i] or 0.4, shadow = true, font = font_table and (SMODS.Fonts[font_table[i]] or G.FONTS[font_table[i]])}}
               table.insert(node.nodes, inner_node)
             end
             table.insert(button_contents.nodes, node)
@@ -693,6 +694,7 @@ function create_drag_target_from_card(_card)
           cover = type(v.moveable_t) == "string" and G.DRAG_TARGETS[v.moveable_t] or G.DRAG_TARGETS[k] or G.DRAG_TARGETS.S_buy,
           colour = adjust_alpha(v.colour, (G.SETTINGS.drag_area_opacity / 100)),
           text = type(v.text) == "function" and v.text(_card),
+          font = type(v.font) == "function" and v.font(_card),
           card = _card,
           active_check = v.active_check,
           release_func = v.release_func,
@@ -726,7 +728,7 @@ function drag_target(args)
 
   local text_rows = {}
   for k, v in ipairs(args.text) do
-    text_rows[#text_rows+1] = {n=G.UIT.R, config={align = "cm", padding = 0.05, maxw = drag_area_width-0.1}, nodes={{n=G.UIT.O, config={object = DynaText({scale = args.scale, string = v, maxw = args.maxw or (drag_area_width-0.1), colours = {args.text_colour},float = true, shadow = true, silent = not args.noisy, 0.7, pop_in = 0, pop_in_rate = 6, rotate = args.rotate or nil})}}}}
+    text_rows[#text_rows+1] = {n=G.UIT.R, config={align = "cm", padding = 0.05, maxw = drag_area_width-0.1}, nodes={{n=G.UIT.O, config={object = DynaText({scale = args.scale, string = v, maxw = args.maxw or (drag_area_width-0.1), colours = {args.text_colour},float = true, shadow = true, silent = not args.noisy, 0.7, pop_in = 0, pop_in_rate = 6, rotate = args.rotate or nil, font = args.font and (SMODS.Fonts[args.font[k]] or G.FONTS[args.font[k]])})}}}}
   end
 
   args.DT = UIBox{

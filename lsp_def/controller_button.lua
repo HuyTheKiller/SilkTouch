@@ -8,6 +8,7 @@
 ---@field button_order? integer Alignment order for this button (lower number means higher order from top to bottom).
 ---@field text? fun(card: table|Card): table|{single_text?: true} A function returning a table of localized texts. Append `single_text` field to the return table to shorten node creation.
 ---@field text_scale? fun(): table A function returning a table of text scales for the above table.
+---@field font? fun(card: table|Card): table A function returning a table of font keys (or index numbers if using vanilla fonts) for the above table. Non-existent keys default to language font.
 ---@field colour? number[] Active colour for this button. Can be ignored if `active_check_cb` is defined.
 ---@field card_width_coeffi? number The coefficient for the focus box width of the card this button is on.
 ---@field minw? number Minimum width for this button.
