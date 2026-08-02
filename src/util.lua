@@ -488,27 +488,10 @@ function string.split(str, sep)
     return t
 end
 
-G.FUNCS.check_drag_target_active = function(e)
-  if e.config.args.active_check(e.config.args.card) then
-    if not e.config.pulse_border or not e.config.args.init then
-      e.config.pulse_border = true
-      e.config.colour = e.config.args.colour
-      e.config.args.text_colour[4] = 1
-      e.config.release_func = e.config.args.release_func
-    end
-  else
-    if e.config.pulse_border or not e.config.args.init then
-      e.config.pulse_border = nil
-      e.config.colour = adjust_alpha(G.C.L_BLACK, 0.9)
-      e.config.args.text_colour[4] = 0.5
-      e.config.release_func = nil
-    end
-  end
-  e.config.args.init = true
-end
-
-function create_drag_target_from_card(_card)
-  if _card and G.STAGE == G.STAGES.RUN then
+local set_screen_pos_ref = set_screen_positions
+function set_screen_positions()
+  set_screen_pos_ref()
+  if G.STAGE == G.STAGES.RUN then
     if not G.DRAG_TARGETS then
       local P_select_T = {
         x = G.play.T.x - 0.7,
@@ -578,7 +561,30 @@ function create_drag_target_from_card(_card)
         end
       end
     end
+  end
+end
 
+G.FUNCS.check_drag_target_active = function(e)
+  if e.config.args.active_check(e.config.args.card) then
+    if not e.config.pulse_border or not e.config.args.init then
+      e.config.pulse_border = true
+      e.config.colour = e.config.args.colour
+      e.config.args.text_colour[4] = 1
+      e.config.release_func = e.config.args.release_func
+    end
+  else
+    if e.config.pulse_border or not e.config.args.init then
+      e.config.pulse_border = nil
+      e.config.colour = adjust_alpha(G.C.L_BLACK, 0.9)
+      e.config.args.text_colour[4] = 0.5
+      e.config.release_func = nil
+    end
+  end
+  e.config.args.init = true
+end
+
+function create_drag_target_from_card(_card)
+  if _card and G.STAGE == G.STAGES.RUN then
     if not SMODS then
       if _card.area and (_card.area == G.shop_jokers or _card.area == G.shop_vouchers or _card.area == G.shop_booster) then
         local buy_loc = copy_table(localize((_card.ability.set == "Voucher" and 'ml_redeem_target') or (_card.ability.set == "Booster" and 'ml_open_target') or 'ml_buy_target'))
