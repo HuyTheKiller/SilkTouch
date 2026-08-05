@@ -535,7 +535,10 @@ else
         -- been dragged away from the start of the drag by a certain amount to avoid having hiding the button when the user is
         -- clicking on a card as that would cause the button to show up again on the next update.
         -- Sometime the distance doesn't seem to trigger so we also check for the duration of the drag.
-        if self.dragging.target and self.dragging.target.area and self.dragging.target.area.config.type ~= 'hand' and self.cursor_down and self.cursor_up and (Vector_Dist(self.cursor_down.T, self.cursor_up.T) > --[[ G.MIN_CLICK_DIST ]] 5 or (self.cursor_down.duration > (0.15 * G.SPEEDFACTOR))) then
+        if self.dragging.target and self.dragging.target.highlighted and self.dragging.target.area
+            and self.dragging.target.area.config.type ~= 'hand' and self.cursor_down and self.cursor_up
+            and (Vector_Dist(self.cursor_down.T, self.cursor_up.T) > --[[ G.MIN_CLICK_DIST ]] 5 or (self.cursor_down.duration > (0.15 * G.SPEEDFACTOR)))
+        then
             self.dragging.target.area:remove_from_highlighted(self.dragging.target)
         end
         self.dragging.target:drag()
@@ -836,7 +839,10 @@ else
         -- been dragged away from the start of the drag by a certain amount to avoid having hiding the button when the user is
         -- clicking on a card as that would cause the button to show up again on the next update.
         -- Sometime the distance doesn't seem to trigger so we also check for the duration of the drag.
-        if self.dragging.target and self.dragging.target.area and self.dragging.target.area.config.type ~= 'hand' and self.cursor_down and self.cursor_up and (Vector_Dist(self.cursor_down.T, self.cursor_up.T) > --[[ G.MIN_CLICK_DIST ]] 5 or (self.cursor_down.duration > (0.15 * G.SPEEDFACTOR))) then
+        if self.dragging.target and self.dragging.target.highlighted and self.dragging.target.area
+            and self.dragging.target.area.config.type ~= 'hand' and self.cursor_down and self.cursor_up
+            and (Vector_Dist(self.cursor_down.T, self.cursor_up.T) > --[[ G.MIN_CLICK_DIST ]] 5 or (self.cursor_down.duration > (0.15 * G.SPEEDFACTOR)))
+        then
             self.dragging.target.area:remove_from_highlighted(self.dragging.target)
         end
         self.dragging.target:drag()
