@@ -716,7 +716,7 @@ end
 function drag_target(args)
   if not G.SETTINGS.enable_dragging then return end
   args = args or {}
-  if args.card and args.card.area then args.card.area:remove_from_highlighted(args.card) end
+  if args.card and args.card.highlighted and args.card.area then args.card.area:remove_from_highlighted(args.card) end
   args.text = args.text or {'BUY'}
   args.colour = copy_table(args.colour or G.C.UI.TRANSPARENT_DARK)
   args.cover = args.cover or nil
