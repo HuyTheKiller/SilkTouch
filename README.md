@@ -274,3 +274,16 @@ This version is packed with a brand new API: `SilkTouch.ControllerButton`, allow
         ```
     - `active_check_cb`, `press_func_cb`: String keys to the respective function in `G.FUNCS` for handling whether a button can be activated and the action it will perform, must be defined together (highly recommended)
         - If these two are defined, `colour`, `active_check` and `press_func` may be ignored
+    - `handy_insta_action`: If [Handy](https://github.com/SleepyG11/HandyBalatro) v2.0.0 or newer is installed, specify which insta-action to bind to this button
+        - Available string options are `sell`, `buy` and `use`
+    - `get_handy_insta_action`: Used for finer control over which insta-action to bind
+        - Expects a function like this:
+        ```lua
+        {
+            get_handy_insta_action = function(card)
+                -- There's currently no great example of what to handle multiple insta-actions
+                -- Just go with it I guess?
+                return "buy"
+            end
+        }
+        ```
