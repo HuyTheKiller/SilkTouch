@@ -18,6 +18,8 @@
 ---@field press_func? fun(card: table|Card) Used to perform an action when this button is pressed. Can be ignored if `press_func_cb` is defined.
 ---@field active_check_cb? string If defined, use G.FUNCS[active_check_cb] to check instead of automatically defining a new function. Must be defined alongside `press_func_cb`.
 ---@field press_func_cb? string If defined, use G.FUNCS[press_func_cb] to check instead of automatically defining a new function. Must be defined alongside `active_check_cb`.
+---@field handy_insta_action? string If Handy v2.0.0 or newer is installed, specify which insta-action to bind to this button.
+---@field get_handy_insta_action? fun(cad: table|Card): string Used for finer control over which insta-action to bind.
 ---@field super? SMODS.GameObject|table Parent class.
 ---@field obj_table? table<string, SilkTouch.ControllerButton|table> Table of objects registered to this class.
 ---@field obj_buffer? string[] Array of keys to all objects registered to this class.

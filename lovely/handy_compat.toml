@@ -1,0 +1,43 @@
+[manifest]
+dump_lua = true
+priority = 0
+version = "1.0.0"
+
+# Allow controller buttons with handy_insta_action defined to be marked as keybind-able by Handy
+[[patches]]
+[patches.pattern]
+target = '=[SMODS Handy "src/core/controller/gamepad.lua"]'
+pattern = '''
+if override_key and controller_overrides[override_key] then
+'''
+position = "before"
+payload = '''
+if SilkTouch and SilkTouch.ControllerButton then
+	-- Remove fixed offsets
+	-- Honestly, what are these even doing if there's a fallback like e.config.focus_args.offset
+	for k, v in pairs(controller_overrides) do
+		if k == "insta_actions_buy" or k == "insta_actions_sell" or k == "insta_actions_use" then
+			v.align = nil
+			v.offset = nil
+		end
+	end
+	if e.parent then
+		if
+			e.parent.config.ref_table
+			and e.parent.config.ref_table.is
+			and e.parent.config.ref_table:is(Card)
+		then
+			for _, st_key in ipairs(SilkTouch.ControllerButton.obj_buffer or {}) do
+				if st_key == e.parent.config.id then
+					local action = e.parent.config.handy_insta_action
+					if action == "buy" or action == "sell" or action == "use" then
+						override_key = "insta_actions_"..action
+						break
+					end
+				end
+			end
+		end
+	end
+end
+'''
+match_indent = true

@@ -214,7 +214,7 @@ function G.UIDEF.card_focus_ui(card)
       if k ~= "silktouch_order" then
         local side = v.get_side and v.get_side(card) or v.side
         base_attach.children[k] = G.UIDEF.card_focus_button{
-          card = card, parent = base_attach, type = k, func = v.active_check_cb, button = v.press_func_cb, SMODS_use_card = v.SMODS_use_card,
+          card = card, parent = base_attach, type = k, func = v.active_check_cb, button = v.press_func_cb, handy_insta_action = v.get_handy_insta_action and v.get_handy_insta_action(card) or v.handy_insta_action, SMODS_use_card = v.SMODS_use_card,
           card_width = card_width*v.card_width_coeffi, max_index = base_attach.config.align_count[side], index = i
         }
       end
@@ -397,7 +397,7 @@ function G.UIDEF.card_focus_button(args)
           T = {args.card.VT.x,args.card.VT.y,0,0},
           definition =
             {n=G.UIT.ROOT, config = {align = 'cm', colour = G.C.CLEAR}, nodes={
-              {n=G.UIT.R, config={id = k, ref_table = args.card, ref_parent = args.parent, align = side == "left" and 'cl' or 'cr', colour = G.C.BLACK, shadow = true, r = 0.08, func = args.func, one_press = true, button = args.button, SMODS_use_card = args.SMODS_use_card, focus_args = {type = 'none'}, hover = true}, nodes={
+              {n=G.UIT.R, config={id = k, ref_table = args.card, ref_parent = args.parent, align = side == "left" and 'cl' or 'cr', colour = G.C.BLACK, shadow = true, r = 0.08, func = args.func, one_press = true, button = args.button, handy_insta_action = v.get_handy_insta_action and v.get_handy_insta_action(card) or v.handy_insta_action, SMODS_use_card = args.SMODS_use_card, focus_args = {type = 'none'}, hover = true}, nodes={
                 {n=G.UIT.R, config={align = side == "left" and 'cl' or 'cr', minw = minw, minh = minh, padding = 0.08,
                     focus_args = {button = v.get_button_key and v.get_button_key(args.card) or v.button_key, scale = 0.55, orientation = side == "left" and 'tli' or 'tri', offset = {x = side == "left" and 0.1 or -0.1, y = 0}, type = 'none'},
                     func = 'set_button_pip'}, nodes={
