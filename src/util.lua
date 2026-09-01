@@ -51,7 +51,16 @@ function Game:prep_stage(new_stage, new_state, new_game_obj)
     prep_stage_ref(self, new_stage, new_state, new_game_obj)
     self.widescreen = false
     local w, h = love.window.getMode()
-    if w/h >= 2 then self.widescreen = true end
+    local prevent_widescreen = false
+    if SMODS then
+        for _, mod in ipairs(SMODS.mod_list) do
+            if mod.prevent_widescreen then
+                prevent_widescreen = true
+                break
+            end
+        end
+    end
+    if w/h >= 2 and not prevent_widescreen then self.widescreen = true end
 end
 
 G.FUNCS.cycle_update = function(args)
