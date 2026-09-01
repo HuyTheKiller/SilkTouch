@@ -287,3 +287,9 @@ This version is packed with a brand new API: `SilkTouch.ControllerButton`, allow
             end
         }
         ```
+---
+# Utilities
+These only apply if Steamodded is installed:
+- `SMODS.current_mod.prevent_widescreen`
+    - Mobile devices with 18:9 aspect ratio or wider automatically set `G.widescreen` to `true` to readjust several UI elements to match that of native mobile.
+    - Set `SMODS.current_mod.prevent_widescreen` to `true` to disable widescreen effects. Much like optional features in Steamodded, only one of the installed mods need a truthy value.
