@@ -129,6 +129,17 @@ This version is packed with a brand new API: `SilkTouch.ControllerButton`, allow
             end
         }
         ```
+    - `refresh_every_drag`: Automatically renew this drag area every time an applicable card is dragged
+        - Expects boolean or a function like this:
+        ```lua
+        {
+            refresh_every_drag = function()
+                -- Example case for Balatro portrait mobile
+                return G.F_PORTRAIT
+            end
+        }
+        ```
+
 
 # API Documentation: `SilkTouch.ControllerButton`
 
@@ -292,3 +303,6 @@ This version is packed with a brand new API: `SilkTouch.ControllerButton`, allow
 - `SMODS.current_mod.prevent_widescreen`
     - Mobile devices with 18:9 aspect ratio or wider automatically set `G.widescreen` to `true` to readjust several UI elements to match that of native mobile.
     - Set `SMODS.current_mod.prevent_widescreen` to `true` to disable widescreen effects. Much like optional features in Steamodded, only one of the installed mods need a truthy value.
+- `SMODS.current_mod.early_drag_init`
+    - By default, drag areas are initialized when a card is dragged for the first time, once per session (except drag areas with `refresh_every_drag`).
+    - Set `SMODS.current_mod.early_drag_init` to `true` to initialize at run start instead. Much like optional features in Steamodded, only one of the installed mods need a truthy value.
