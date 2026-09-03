@@ -543,7 +543,7 @@ function set_screen_positions()
         if not G.DRAG_TARGETS[k] then
           G.DRAG_TARGETS[k] = Moveable{T = v}
           G.DRAG_TARGETS[k].vanilla = true
-          if k == "J_sell" or k == "C_use" or k == "S_buy_and_use" then
+          if G.F_PORTRAIT and (k == "J_sell" or k == "C_use" or k == "S_buy_and_use") then
             G.DRAG_TARGETS[k].refresh_every_drag = true
           end
         end
@@ -664,7 +664,7 @@ function create_drag_target_from_card(_card)
       if not G.DRAG_TARGETS[k] then
         G.DRAG_TARGETS[k] = Moveable{T = v}
         G.DRAG_TARGETS[k].vanilla = true
-        if k == "J_sell" or k == "C_use" or k == "S_buy_and_use" then
+        if G.F_PORTRAIT and (k == "J_sell" or k == "C_use" or k == "S_buy_and_use") then
           G.DRAG_TARGETS[k].refresh_every_drag = true
         end
       end
