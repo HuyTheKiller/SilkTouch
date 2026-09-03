@@ -43,14 +43,21 @@ SilkTouch.DragTarget{
     key = "S_buy",
     prefix_config = {key = false},
     moveable_t = function()
-        return Moveable{
+        local T = {
+            x = G.jokers.T.x,
+            y = G.jokers.T.y - 0.1,
+            w = G.consumeables.T.x + G.consumeables.T.w - G.jokers.T.x,
+            h = G.jokers.T.h + 0.6,
+        }
+        if G.F_PORTRAIT then
             T = {
                 x = G.jokers.T.x,
-                y = G.jokers.T.y - 0.1,
-                w = G.consumeables.T.x + G.consumeables.T.w - G.jokers.T.x,
+                y = G.jokers.T.y - 0.2,
+                w = G.jokers.T.w,
                 h = G.jokers.T.h + 0.6,
             }
-        }
+        end
+        return Moveable{T = T}
     end,
     text = function(card)
         local buy_loc
@@ -95,14 +102,21 @@ SilkTouch.DragTarget{
     key = "S_buy_and_use",
     prefix_config = {key = false},
     moveable_t = function()
-        return Moveable{
-            T = {
-                x = G.deck.T.x + 0.2,
-                y = G.deck.T.y - 5.1,
-                w = G.deck.T.w - 0.1,
-                h = 4.5,
-            }
+        local T = {
+            x = G.deck.T.x + 0.2,
+            y = G.deck.T.y - 5.1,
+            w = G.deck.T.w - 0.1,
+            h = 4.5,
         }
+        if G.F_PORTRAIT then
+            T = {
+                x = G.deck.T.x - 0.2,
+                y = G.deck.T.y - 0.2,
+                w = G.deck.T.w + 0.4,
+                h = G.deck.T.h + 0.6,
+            }
+        end
+        return Moveable{T = T}
     end,
     text = function(card)
         local buy_use_loc = copy_table(localize("ml_buy_and_use_target"))
@@ -125,20 +139,28 @@ SilkTouch.DragTarget{
             return
         end
     end,
+    refresh_every_drag = function() return G.F_PORTRAIT end,
 }
 
 SilkTouch.DragTarget{
     key = "C_use",
     prefix_config = {key = false},
     moveable_t = function()
-        return Moveable{
-            T = {
-                x = G.deck.T.x + 0.2,
-                y = G.deck.T.y - 5.1,
-                w = G.deck.T.w - 0.1,
-                h = 4.5,
-            }
+        local T = {
+            x = G.deck.T.x + 0.2,
+            y = G.deck.T.y - 5.1,
+            w = G.deck.T.w - 0.1,
+            h = 4.5,
         }
+        if G.F_PORTRAIT then
+            T = {
+                x = G.deck.T.x - 0.2,
+                y = G.deck.T.y - 0.2,
+                w = G.deck.T.w + 0.4,
+                h = G.deck.T.h + 0.6,
+            }
+        end
+        return Moveable{T = T}
     end,
     text = function(card)
         return {localize('b_use')}
@@ -163,6 +185,7 @@ SilkTouch.DragTarget{
             G.FUNCS.use_card{config = {ref_table = card, SMODS_use_card = true}}
         end
     end,
+    refresh_every_drag = function() return G.F_PORTRAIT end,
 }
 
 SilkTouch.DragTarget{
@@ -245,6 +268,7 @@ SilkTouch.DragTarget{
     release_func = function(card)
         G.FUNCS.sell_card{config = {ref_table = card}}
     end,
+    refresh_every_drag = function() return G.F_PORTRAIT end,
 }
 
 SilkTouch.DragTarget{

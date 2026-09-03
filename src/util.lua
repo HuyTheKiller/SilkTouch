@@ -501,29 +501,53 @@ local set_screen_pos_ref = set_screen_positions
 function set_screen_positions()
   set_screen_pos_ref()
   if G.STAGE == G.STAGES.RUN then
-    if SMODS and not G.DRAG_TARGETS then
-      local P_select_T = {
-        x = G.play.T.x - 0.7,
-        y = G.play.T.y - 2,
-        w = G.play.T.w + 1.4,
-        h = G.play.T.h + 1,
+    local early_drag_cache = false
+    if SMODS then
+      for _, mod in ipairs(SMODS.mod_list) do
+        if mod.early_drag_init then
+          early_drag_cache = true
+          break
+        end
+      end
+    end
+    if early_drag_cache then
+      local vanilla_drag_init_T = {
+        S_buy =         {x = G.jokers.T.x, y = G.jokers.T.y - 0.1, w = G.consumeables.T.x + G.consumeables.T.w - G.jokers.T.x, h = G.jokers.T.h + 0.6},
+        S_buy_and_use = {x = G.deck.T.x + 0.2, y = G.deck.T.y - 5.1, w = G.deck.T.w - 0.1, h = 4.5},
+        C_sell =        {x = G.jokers.T.x, y = G.jokers.T.y - 0.2, w = G.jokers.T.w, h = G.jokers.T.h + 0.6},
+        J_sell =        {x = G.consumeables.T.x + 0.3, y = G.consumeables.T.y - 0.2, w = G.consumeables.T.w - 0.3, h = G.consumeables.T.h + 0.6},
+        C_use =         {x = G.deck.T.x + 0.2, y = G.deck.T.y - 5.1, w = G.deck.T.w - 0.1, h = 4.5},
+        P_select =      {x = G.play.T.x - 0.7, y = G.play.T.y - 2, w = G.play.T.w + 1.4, h = G.play.T.h + 1},
       }
       if (SilkTouch.OS == 'Android' or SilkTouch.OS == 'iOS') and G.widescreen then
-        P_select_T = {
+        vanilla_drag_init_T.P_select = {
           x = G.play.T.x,
           y = G.play.T.y - 2,
           w = G.play.T.w + 2,
           h = G.play.T.h + 1,
         }
       end
-      G.DRAG_TARGETS = {
-        S_buy =         Moveable{T={x = G.jokers.T.x, y = G.jokers.T.y - 0.1, w = G.consumeables.T.x + G.consumeables.T.w - G.jokers.T.x, h = G.jokers.T.h+0.6}},
-        S_buy_and_use = Moveable{T={x = G.deck.T.x + 0.2, y = G.deck.T.y - 5.1, w = G.deck.T.w-0.1, h = 4.5}},
-        C_sell =        Moveable{T={x = G.jokers.T.x, y = G.jokers.T.y - 0.2, w = G.jokers.T.w, h = G.jokers.T.h+0.6}},
-        J_sell =        Moveable{T={x = G.consumeables.T.x+0.3, y = G.consumeables.T.y - 0.2, w = G.consumeables.T.w-0.3, h = G.consumeables.T.h+0.6}},
-        C_use =         Moveable{T={x = G.deck.T.x + 0.2, y = G.deck.T.y - 5.1, w = G.deck.T.w-0.1, h =4.5}},
-        P_select =      Moveable{T=P_select_T},
-      }
+      if G.F_PORTRAIT then
+        vanilla_drag_init_T.S_buy =         {x = G.jokers.T.x, y = G.jokers.T.y - 0.2, w = G.jokers.T.w, h = G.jokers.T.h + 0.6}
+        vanilla_drag_init_T.S_buy_and_use = {x = G.deck.T.x - 0.2, y = G.deck.T.y - 0.2, w = G.deck.T.w + 0.4, h = G.deck.T.h + 0.6}
+        vanilla_drag_init_T.C_use =         {x = G.deck.T.x - 0.2, y = G.deck.T.y - 0.2, w = G.deck.T.w + 0.4, h = G.deck.T.h + 0.6}
+      end
+      G.DRAG_TARGETS = G.DRAG_TARGETS or {}
+      for k, _ in pairs(G.DRAG_TARGETS) do
+        if G.DRAG_TARGETS[k].refresh_every_drag then
+          G.DRAG_TARGETS[k]:remove()
+          G.DRAG_TARGETS[k] = nil
+        end
+      end
+      for k, v in pairs(vanilla_drag_init_T) do
+        if not G.DRAG_TARGETS[k] then
+          G.DRAG_TARGETS[k] = Moveable{T = v}
+          G.DRAG_TARGETS[k].vanilla = true
+          if k == "J_sell" or k == "C_use" or k == "S_buy_and_use" then
+            G.DRAG_TARGETS[k].refresh_every_drag = true
+          end
+        end
+      end
       for k, v in pairs(SilkTouch.DragTargets or {}) do
         if type(v.moveable_t) == "table" then
           local init_args = {T = {}}
@@ -564,9 +588,23 @@ function set_screen_positions()
             end
             init_args.T[kk] = init_args.T[kk] + (vv.mod_value or 0)
           end
-          G.DRAG_TARGETS[k] = Moveable(init_args)
+          if G.DRAG_TARGETS[k] and (G.DRAG_TARGETS[k].vanilla or G.DRAG_TARGETS[k].refresh_every_drag) then
+            G.DRAG_TARGETS[k]:remove()
+            G.DRAG_TARGETS[k] = nil
+          end
+          if not G.DRAG_TARGETS[k] then
+            G.DRAG_TARGETS[k] = Moveable(init_args)
+            G.DRAG_TARGETS[k].refresh_every_drag = type(v.refresh_every_drag) == "function" and v.refresh_every_drag() or v.refresh_every_drag
+          end
         elseif type(v.moveable_t) == "function" then
-          G.DRAG_TARGETS[k] = v.moveable_t()
+          if G.DRAG_TARGETS[k] and (G.DRAG_TARGETS[k].vanilla or G.DRAG_TARGETS[k].refresh_every_drag) then
+            G.DRAG_TARGETS[k]:remove()
+            G.DRAG_TARGETS[k] = nil
+          end
+          if not G.DRAG_TARGETS[k] then
+            G.DRAG_TARGETS[k] = v.moveable_t()
+            G.DRAG_TARGETS[k].refresh_every_drag = type(v.refresh_every_drag) == "function" and v.refresh_every_drag() or v.refresh_every_drag
+          end
         end
       end
     end
@@ -594,31 +632,103 @@ end
 
 function create_drag_target_from_card(_card)
   if _card and G.STAGE == G.STAGES.RUN then
-    if not SMODS then
-      if not G.DRAG_TARGETS then
-        local P_select_T = {
-          x = G.play.T.x - 0.7,
-          y = G.play.T.y - 2,
-          w = G.play.T.w + 1.4,
-          h = G.play.T.h + 1,
-        }
-        if (SilkTouch.OS == 'Android' or SilkTouch.OS == 'iOS') and G.widescreen then
-          P_select_T = {
-            x = G.play.T.x,
-            y = G.play.T.y - 2,
-            w = G.play.T.w + 2,
-            h = G.play.T.h + 1,
-          }
-        end
-        G.DRAG_TARGETS = {
-          S_buy =         Moveable{T={x = G.jokers.T.x, y = G.jokers.T.y - 0.1, w = G.consumeables.T.x + G.consumeables.T.w - G.jokers.T.x, h = G.jokers.T.h+0.6}},
-          S_buy_and_use = Moveable{T={x = G.deck.T.x + 0.2, y = G.deck.T.y - 5.1, w = G.deck.T.w-0.1, h = 4.5}},
-          C_sell =        Moveable{T={x = G.jokers.T.x, y = G.jokers.T.y - 0.2, w = G.jokers.T.w, h = G.jokers.T.h+0.6}},
-          J_sell =        Moveable{T={x = G.consumeables.T.x+0.3, y = G.consumeables.T.y - 0.2, w = G.consumeables.T.w-0.3, h = G.consumeables.T.h+0.6}},
-          C_use =         Moveable{T={x = G.deck.T.x + 0.2, y = G.deck.T.y - 5.1, w = G.deck.T.w-0.1, h =4.5}},
-          P_select =      Moveable{T=P_select_T},
-        }
+    local vanilla_drag_init_T = {
+      S_buy =         {x = G.jokers.T.x, y = G.jokers.T.y - 0.1, w = G.consumeables.T.x + G.consumeables.T.w - G.jokers.T.x, h = G.jokers.T.h + 0.6},
+      S_buy_and_use = {x = G.deck.T.x + 0.2, y = G.deck.T.y - 5.1, w = G.deck.T.w - 0.1, h = 4.5},
+      C_sell =        {x = G.jokers.T.x, y = G.jokers.T.y - 0.2, w = G.jokers.T.w, h = G.jokers.T.h + 0.6},
+      J_sell =        {x = G.consumeables.T.x + 0.3, y = G.consumeables.T.y - 0.2, w = G.consumeables.T.w - 0.3, h = G.consumeables.T.h + 0.6},
+      C_use =         {x = G.deck.T.x + 0.2, y = G.deck.T.y - 5.1, w = G.deck.T.w - 0.1, h = 4.5},
+      P_select =      {x = G.play.T.x - 0.7, y = G.play.T.y - 2, w = G.play.T.w + 1.4, h = G.play.T.h + 1},
+    }
+    if (SilkTouch.OS == 'Android' or SilkTouch.OS == 'iOS') and G.widescreen then
+      vanilla_drag_init_T.P_select = {
+        x = G.play.T.x,
+        y = G.play.T.y - 2,
+        w = G.play.T.w + 2,
+        h = G.play.T.h + 1,
+      }
+    end
+    if G.F_PORTRAIT then
+      vanilla_drag_init_T.S_buy =         {x = G.jokers.T.x, y = G.jokers.T.y - 0.2, w = G.jokers.T.w, h = G.jokers.T.h + 0.6}
+      vanilla_drag_init_T.S_buy_and_use = {x = G.deck.T.x - 0.2, y = G.deck.T.y - 0.2, w = G.deck.T.w + 0.4, h = G.deck.T.h + 0.6}
+      vanilla_drag_init_T.C_use =         {x = G.deck.T.x - 0.2, y = G.deck.T.y - 0.2, w = G.deck.T.w + 0.4, h = G.deck.T.h + 0.6}
+    end
+    G.DRAG_TARGETS = G.DRAG_TARGETS or {}
+    for k, _ in pairs(G.DRAG_TARGETS) do
+      if G.DRAG_TARGETS[k].refresh_every_drag then
+        G.DRAG_TARGETS[k]:remove()
+        G.DRAG_TARGETS[k] = nil
       end
+    end
+    for k, v in pairs(vanilla_drag_init_T) do
+      if not G.DRAG_TARGETS[k] then
+        G.DRAG_TARGETS[k] = Moveable{T = v}
+        G.DRAG_TARGETS[k].vanilla = true
+        if k == "J_sell" or k == "C_use" or k == "S_buy_and_use" then
+          G.DRAG_TARGETS[k].refresh_every_drag = true
+        end
+      end
+    end
+    for k, v in pairs(SilkTouch.DragTargets or {}) do
+      if type(v.moveable_t) == "table" then
+        local init_args = {T = {}}
+        for kk, vv in pairs(v.moveable_t) do
+          init_args.T[kk] = 0
+          if type(vv.ref_table) == "string" and type(vv.ref_value) == "string" then
+            local ref_table = {}
+            local table_path = string.split(vv.ref_table, ".")
+            ref_table = table_path[1] == "card" and _card or _G[table_path[1]]
+            for i = 2, #table_path do
+              if ref_table[table_path[i]] then
+                ref_table = ref_table[table_path[i]]
+              end
+            end
+            init_args.T[kk] = init_args.T[kk] + ref_table[vv.ref_value]
+          elseif type(vv.ref_table) == "table" and type(vv.ref_value) == "table"
+          and vv.ref_table[1] and vv.ref_value[1] and #vv.ref_table == #vv.ref_value
+          and #vv.ref_table <= #(vv.operation_table or {}) + 1 then
+            for i = 1, #vv.ref_table do
+              local ref_table = {}
+              local table_path = string.split(vv.ref_table[i], ".")
+              ref_table = table_path[1] == "card" and _card or _G[table_path[1]]
+              for ii = 2, #table_path do
+                if ref_table[table_path[ii]] then
+                ref_table = ref_table[table_path[ii]]
+                end
+              end
+              if i == 1 then
+                init_args.T[kk] = init_args.T[kk] + ref_table[vv.ref_value[i]]
+              else
+                if vv.operation_table[i-1] == "+" or vv.operation_table[i-1] == "plus" then
+                  init_args.T[kk] = init_args.T[kk] + ref_table[vv.ref_value[i]]
+                elseif vv.operation_table[i-1] == "-" or vv.operation_table[i-1] == "minus" then
+                  init_args.T[kk] = init_args.T[kk] - ref_table[vv.ref_value[i]]
+                end
+              end
+            end
+          end
+          init_args.T[kk] = init_args.T[kk] + (vv.mod_value or 0)
+        end
+        if G.DRAG_TARGETS[k] and (G.DRAG_TARGETS[k].vanilla or G.DRAG_TARGETS[k].refresh_every_drag) then
+          G.DRAG_TARGETS[k]:remove()
+          G.DRAG_TARGETS[k] = nil
+        end
+        if not G.DRAG_TARGETS[k] then
+          G.DRAG_TARGETS[k] = Moveable(init_args)
+          G.DRAG_TARGETS[k].refresh_every_drag = type(v.refresh_every_drag) == "function" and v.refresh_every_drag() or v.refresh_every_drag
+        end
+      elseif type(v.moveable_t) == "function" then
+        if G.DRAG_TARGETS[k] and (G.DRAG_TARGETS[k].vanilla or G.DRAG_TARGETS[k].refresh_every_drag) then
+          G.DRAG_TARGETS[k]:remove()
+          G.DRAG_TARGETS[k] = nil
+        end
+        if not G.DRAG_TARGETS[k] then
+          G.DRAG_TARGETS[k] = v.moveable_t()
+          G.DRAG_TARGETS[k].refresh_every_drag = type(v.refresh_every_drag) == "function" and v.refresh_every_drag() or v.refresh_every_drag
+        end
+      end
+    end
+    if not SMODS then
       if _card.area and (_card.area == G.shop_jokers or _card.area == G.shop_vouchers or _card.area == G.shop_booster) then
         local buy_loc = copy_table(localize((_card.ability.set == "Voucher" and 'ml_redeem_target') or (_card.ability.set == "Booster" and 'ml_open_target') or 'ml_buy_target'))
         buy_loc[#buy_loc + 1] = localize('$').._card.cost

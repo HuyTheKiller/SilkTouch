@@ -14,6 +14,7 @@
 ---@field drag_condition? fun(card: table|Card): boolean Used to check if dragging a card shows the drag area or not.
 ---@field active_check? fun(card: table|Card): boolean Used to check if releasing inside drag area may trigger `release_func`.
 ---@field release_func? fun(card: table|Card) Used to perform an action when released inside drag area.
+---@field refresh_every_drag? boolean|fun(): boolean Set to `true` or to a function returning whichever truthy flags to automatically renew this drag area every time an applicable card is dragged.
 ---@field emboss? number See [Steamodded UI guide](https://docs.smods.dev/Guides/UI-Guide/#node-configuration)
 ---@field align? string See [Steamodded UI guide](https://docs.smods.dev/Guides/UI-Guide/#node-configuration)
 ---@field offset? {x: number, y: number} How far away from the alignment origin this drag area is. Simply use `moveable_t` for finer control over the positions.
