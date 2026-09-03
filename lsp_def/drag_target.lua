@@ -14,8 +14,8 @@
 ---@field drag_condition? fun(card: table|Card): boolean Used to check if dragging a card shows the drag area or not.
 ---@field active_check? fun(card: table|Card): boolean Used to check if releasing inside drag area may trigger `release_func`.
 ---@field release_func? fun(card: table|Card) Used to perform an action when released inside drag area.
----@field emboss? number See [Steamodded UI guide](https://github.com/Steamodded/smods/wiki/UI-Guide#node-configuration)
----@field align? string See [Steamodded UI guide](https://github.com/Steamodded/smods/wiki/UI-Guide#node-configuration)
+---@field emboss? number See [Steamodded UI guide](https://docs.smods.dev/Guides/UI-Guide/#node-configuration)
+---@field align? string See [Steamodded UI guide](https://docs.smods.dev/Guides/UI-Guide/#node-configuration)
 ---@field offset? {x: number, y: number} How far away from the alignment origin this drag area is. Simply use `moveable_t` for finer control over the positions.
 ---@field super? SMODS.GameObject|table Parent class.
 ---@field obj_table? table<string, SilkTouch.DragTarget|table> Table of objects registered to this class.
