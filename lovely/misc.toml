@@ -23,7 +23,8 @@ pattern = '''
 '''
 position = "before"
 payload = '''
-if love.system.getOS() == 'Android' or love.system.getOS() == 'iOS' then
+local success = pcall(require, "imm")
+if not success and (love.system.getOS() == 'Android' or love.system.getOS() == 'iOS') then
     VERSION = VERSION..' (STM)'
 end
 '''
