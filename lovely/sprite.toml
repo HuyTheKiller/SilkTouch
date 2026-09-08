@@ -4,9 +4,8 @@ dump_lua = true
 priority = 1
 
 [[patches]]
-[patches.pattern]
+[patches.regex]
 target = "engine/sprite.lua"
-pattern = "G.SHADERS[_shader or 'dissolve']:send('hovering',((_shadow_height  and not tilt_shadow) or _no_tilt) and 0 or (_draw_major.hover_tilt or 0)*(tilt_shadow or 1))"
+pattern = '''\(_draw_major\.hover_tilt or 0\)\*\(tilt_shadow or 1\)'''
 position = "at"
-payload = "G.SHADERS[_shader or 'dissolve']:send('hovering',((_shadow_height  and not tilt_shadow) or _no_tilt) and 0 or ((not G.CONTROLLER.HID.touch or G.SETTINGS.drag_option == 2) and _draw_major.hover_tilt or 0)*(tilt_shadow or 1))"
-match_indent = false
+payload = "((not G.CONTROLLER.HID.touch or G.SETTINGS.drag_option == 2) and _draw_major.hover_tilt or 0)*(tilt_shadow or 1))"
